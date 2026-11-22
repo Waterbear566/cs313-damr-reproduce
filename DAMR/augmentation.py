@@ -49,7 +49,11 @@ def permutation(x, max_segments=8, seg_mode="random"):
             else:
                 splits = np.array_split(orig_steps, num_segs[i])
             # print([s.shape for s in splits])
-            warp = np.concatenate(np.random.permutation(splits)).ravel()
+            # [Nhóm 5] Sửa tương thích numpy >= 1.24 (list mảng dài khác nhau không còn tự thành mảng object).
+            # Hoán vị chỉ số thay vì hoán vị list: cùng chuỗi số ngẫu nhiên, cùng kết quả như numpy cũ.
+            # Gốc: warp = np.concatenate(np.random.permutation(splits)).ravel()
+            order = np.random.permutation(len(splits))
+            warp = np.concatenate([splits[j] for j in order]).ravel()
             ret[i] = pat[0, warp]
         else:
             ret[i] = pat

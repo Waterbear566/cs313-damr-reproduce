@@ -25,7 +25,9 @@ def main(args):
     if cuda:
         torch.cuda.manual_seed(SEED)
 
-    experiment_log_dir = os.path.join('log', args.dataset + f"_seed_{SEED}")
+    # [Nhóm 5] --save_dir/--variant; với giá trị mặc định đường dẫn giữ như code gốc.
+    run_name = args.dataset + (f"_{args.variant}" if args.variant != 'full' else '') + f"_seed_{SEED}"
+    experiment_log_dir = os.path.join(args.save_dir, run_name)
 
     os.makedirs(experiment_log_dir, exist_ok=True)
     log_file_name = os.path.join(experiment_log_dir, f"logs_{datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}.log")
@@ -103,6 +105,13 @@ if __name__ == "__main__":
 
     parser.add_argument('--MSASB', type=str2bool, default=True)
     parser.add_argument('--adaptive_filter', type=str2bool, default=True)
+
+    # [Nhóm 5] Cờ ghi log, không ảnh hưởng mô hình. Mặc định = hành vi code gốc.
+    parser.add_argument('--log_extra', type=str2bool, default=False,
+                        help='Lưu điểm test mỗi epoch, checkpoint epoch cuối, ghi CSV chung')
+    parser.add_argument('--save_dir', type=str, default='log')
+    parser.add_argument('--variant', type=str, default='full', help='Tên biến thể (cột variant trong CSV)')
+    parser.add_argument('--results_csv', type=str, default='', help='Đường dẫn CSV chung; rỗng = không ghi')
 
     args = parser.parse_known_args()[0]
     main(args)
