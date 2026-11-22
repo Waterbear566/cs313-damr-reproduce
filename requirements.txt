@@ -1,0 +1,13 @@
+# Lập từ các import trong DAMR/ (repo tác giả không có requirements.txt).
+# Tác giả dùng Python 3.8 và PyTorch 2.1.0.
+torch==2.1.0
+lightning
+torchmetrics
+timm
+thop
+faiss-cpu  # hoặc faiss-gpu nếu cài qua conda
+numpy
+pandas
+scipy
+scikit-learn
+joblib
