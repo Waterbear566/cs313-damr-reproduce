@@ -132,7 +132,26 @@ python3 main.py --dataset=PSM --data_path=./data/psm --seed=0 --device=cuda:0 --
 
 Learning rate tác giả dùng cho từng dataset: PSM `1e-4`, MSL `5e-4`, SMD `1e-6`, SWaT `5e-5`, WADI `1e-4`. Về ablation (E4), `main.py` có sẵn cờ `--MSASB`, `--adaptive_filter` và `--num_heads`. Các biến thể w/o MSASB(G), w/o MSASB(L) và τ cố định chưa có cờ riêng, nên cần xem `model.py` để thêm.
 
-> Script chạy hàng loạt cho E2/E4 (`scripts/`) sẽ được cập nhật sau.
+**Chạy E2 bằng script của nhóm** (3 seed 0, 1, 2, learning rate theo tác giả, có ghi log mở rộng):
+
+```bash
+bash scripts/run_e2.sh PSM 0        # đối số: dataset, ID GPU, [số epoch, mặc định 40]
+```
+
+Script bật các cờ nhóm thêm vào `main.py` (mặc định đều tắt, nên không truyền cờ thì code chạy như bản gốc):
+
+| Cờ | Tác dụng |
+|---|---|
+| `--log_extra=True` | Lưu điểm bất thường test mỗi epoch (`scores/epoch_XXX.npy`, `labels.npy`), checkpoint epoch cuối `model_last.pt`, thêm thông tin vào checkpoint |
+| `--save_dir` | Thư mục chứa log và checkpoint (mặc định `log` như code gốc) |
+| `--variant` | Tên biến thể, ghi vào cột `variant` của CSV |
+| `--results_csv` | Ghi mỗi epoch một dòng vào CSV chung |
+
+Kết quả: `results/E2_DAMR.csv`, log ở `logs/E2_<dataset>_seed<k>.log`, checkpoint ở `checkpoints/E2/<dataset>_seed_<k>/saved_models/` (`model.pt` = epoch tốt nhất theo test như code gốc, `model_last.pt` = epoch cuối).
+
+**Trên Kaggle:** mở `notebooks/stage1_kaggle_smoke.ipynb`, chọn GPU T4 và bật Internet. Notebook cài thư viện, tự tìm dữ liệu trong `/kaggle/input`, kiểm tra định dạng (`scripts/check_data.py`), chạy PSM 1 epoch và ước lượng tổng thời gian.
+
+**Kiểm tra dữ liệu:** `python scripts/check_data.py --root DAMR/data` kiểm tra tên file, số chiều, nhãn, và in thống kê kiểu Bảng 1.
 
 Seed dùng chung cho mọi phương pháp: `0, 1, 2`. Seed mặc định của tác giả là 16.
 
@@ -181,7 +200,9 @@ Danh sách đầy đủ ở [`docs/code_vs_paper.md`](docs/code_vs_paper.md). C�
 
 - Code gốc đánh giá trên tập **test** sau mỗi epoch và lưu checkpoint có AUROC test cao nhất; bước đánh giá trên validation bị comment lại.
 - Khi chấm điểm kNN, code lấy ngẫu nhiên 10% đặc trưng của tập train làm ngân hàng so sánh, nên điểm có thêm một nguồn ngẫu nhiên.
-- `<bổ sung sau khi đối chiếu với paper>`
+- Tham số của adaptive temperature **không được đưa vào optimizer**, nên τ do một MLP khởi tạo ngẫu nhiên sinh ra suốt quá trình train (đã kiểm tra). Điều này ảnh hưởng trực tiếp cách đọc kết quả E4.
+- Phép tăng cường `permutation` thay mọi sensor bằng sensor 0 đã hoán vị; MSASB biến đổi Fourier theo trục sensor chứ không theo trục thời gian. Cả hai cần đối chiếu với bài báo.
+- Nhóm sửa một dòng trong `augmentation.py` để chạy được với numpy ≥ 1.24 (kết quả không đổi), và thêm cờ ghi log. Chi tiết ở mục 10, 11.
 
 Tham khảo thêm repo DAMR-reproduce, vốn đã nêu một số khác biệt trước nhóm.
 

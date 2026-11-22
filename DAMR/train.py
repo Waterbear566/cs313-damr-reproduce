@@ -11,6 +11,10 @@ from augmentation import DataTransform
 from utils import get_features
 from thop import profile, clever_format
 
+# [Nhóm 5] Ghi log mở rộng (--log_extra). Không đổi mô hình hay cách huấn luyện; xem docs/code_vs_paper.md.
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 def trainer(model, adaptive_temp, train_loader, val_loader, test_loader, n_sensor, device, args, logger, experiment_log_dir):
 
     init = torch.zeros([n_sensor, n_sensor])
@@ -22,6 +26,11 @@ def trainer(model, adaptive_temp, train_loader, val_loader, test_loader, n_senso
         {'params': [A]}], lr=args.lr, weight_decay=0.0)
 
     best_auc = 0
+    best_epoch = 0  # [Nhóm 5]
+    log_extra = getattr(args, 'log_extra', False)  # [Nhóm 5]
+    if log_extra:
+        scores_dir = os.path.join(experiment_log_dir, "scores")
+        os.makedirs(scores_dir, exist_ok=True)
     logger.debug("Training started ...")
     start_time = time.time()
 
@@ -32,22 +41,43 @@ def trainer(model, adaptive_temp, train_loader, val_loader, test_loader, n_senso
         logger.debug('Epoch: {}/{}, Loss: {}'.format(epoch + 1, args.epochs, train_loss))
         # val_auc, _ = model_evaluate(model, A, train_loader, val_loader, device)
         # logger.debug('Epoch: {}/{}, valid AUROC is: {}'.format(epoch + 1, args.epochs, val_auc))
-        test_auc, _ = model_evaluate(model, args, A, train_loader, test_loader, device)
+        if log_extra:  # [Nhóm 5] giữ lại điểm bất thường của từng epoch
+            test_auc, _, test_scores, test_labels = model_evaluate(model, args, A, train_loader, test_loader, device, return_scores=True)
+            test_auprc = average_precision_score(test_labels, test_scores)
+            np.save(os.path.join(scores_dir, f"epoch_{epoch + 1:03d}.npy"), test_scores.astype(np.float32))
+            if epoch == 0:
+                np.save(os.path.join(scores_dir, "labels.npy"), test_labels.astype(np.int8))
+        else:
+            test_auc, _ = model_evaluate(model, args, A, train_loader, test_loader, device)
         logger.debug('Epoch: {}/{}, test AUROC is: {}'.format(epoch + 1, args.epochs, test_auc))
 
         if best_auc < test_auc:
             best_auc = test_auc
+            best_epoch = epoch + 1  # [Nhóm 5]
 
             # Save the model with the best test AUROC.
             os.makedirs(os.path.join(experiment_log_dir, "saved_models"), exist_ok=True)
             chkpoint = {'model_state_dict': model.state_dict()
             }
+            if log_extra:  # [Nhóm 5] thêm khóa, khóa gốc giữ nguyên
+                chkpoint.update(_extra_state(epoch + 1, test_auc, adaptive_temp, A, args))
             torch.save(chkpoint, os.path.join(experiment_log_dir, "saved_models", f'model.pt'))
 
         # log epoch statistics
         epoch_train_time = time.time() - epoch_start_time
         logger.debug('Epoch: {}/{}, Time: {:.3f}'
                     .format(epoch + 1, args.epochs, epoch_train_time))
+
+        if log_extra:  # [Nhóm 5] checkpoint epoch cuối (ghi đè mỗi epoch) và dòng CSV chung
+            os.makedirs(os.path.join(experiment_log_dir, "saved_models"), exist_ok=True)
+            last = {'model_state_dict': model.state_dict()}
+            last.update(_extra_state(epoch + 1, test_auc, adaptive_temp, A, args))
+            torch.save(last, os.path.join(experiment_log_dir, "saved_models", 'model_last.pt'))
+            if getattr(args, 'results_csv', ''):
+                from common.results import append_result
+                append_result(args.results_csv, model='DAMR', variant=args.variant, dataset=args.dataset,
+                              seed=args.seed, noise=0, epoch=epoch + 1, auroc=f"{test_auc:.6f}",
+                              auprc=f"{test_auprc:.6f}", runtime_s=f"{epoch_train_time:.3f}")
 
         logger.debug('======================================================')
 
@@ -56,6 +86,17 @@ def trainer(model, adaptive_temp, train_loader, val_loader, test_loader, n_senso
     logger.debug('Training time: {}'.format(train_time))
     logger.debug('Finished training.')
     logger.debug(f'best Auc : {best_auc:2.4f}')
+    if log_extra:
+        logger.debug(f'best epoch (theo test, như code gốc) : {best_epoch}')  # [Nhóm 5]
+
+
+def _extra_state(epoch, test_auc, adaptive_temp, A, args):
+    # [Nhóm 5] Thông tin để E5/E6 nạp lại checkpoint và biết nó đến từ đâu.
+    return {'epoch': epoch,
+            'test_auroc': float(test_auc),
+            'adaptive_temp_state_dict': adaptive_temp.state_dict(),
+            'A': A.detach().cpu(),
+            'args': vars(args)}
 
 def model_train(model, adaptive_temp, A, optimizer, train_loader, device, num_heads):
 
@@ -97,7 +138,7 @@ def model_train(model, adaptive_temp, A, optimizer, train_loader, device, num_he
     return total_loss / (total_num)
 
 
-def model_evaluate(model, args, A, train_loader, test_loader, device):
+def model_evaluate(model, args, A, train_loader, test_loader, device, return_scores=False):
 
     # Build a normal feature bank for KNN scoring.
     train_feature_space = []
@@ -138,6 +179,8 @@ def model_evaluate(model, args, A, train_loader, test_loader, device):
 
     auc = roc_auc_score(test_labels, distances)
 
+    if return_scores:  # [Nhóm 5] mặc định vẫn trả về như code gốc
+        return auc, train_feature_space, distances, test_labels
     return auc, train_feature_space
 
 
