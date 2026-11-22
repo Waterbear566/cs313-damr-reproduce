@@ -27,11 +27,11 @@ Nhóm chạy lại **đúng code công bố**, không chỉnh sửa hay cải ti
 |---|---|---|
 | 24520635 | Vũ Cao Mạnh Hùng | Quản lý repo; E2 (DAMR), E4 (ablation) |
 | 24520748 | Ngô Hoàng Khang | E1 (thống kê dataset), E3a (nhóm A), hàm metric chung, demo |
-| 24530556 | Nguyễn Huy Hoàng | E3b (nhóm B) |
+| 24530556 | Nguyễn Huy Hoàng | Báo cáo, slide, câu hỏi phản biện |
 | 24520772 | Võ Huy Khang | Chạy cùng E2/E4; E5 (nhiễu), E6 (t-SNE); đối chiếu số liệu |
 | 24520508 | Nguyễn Trung Hiếu | Script vẽ hình và bảng từ `results/` |
 | 24520411 | Nguyễn Hồng Gấm | Báo cáo, slide, sơ đồ kiến trúc |
-| 24520543 | Lê Minh Hoàng | Báo cáo, slide, câu hỏi phản biện |
+| 24520543 | Lê Minh Hoàng | E3b (nhóm B) |
 
 ---
 
@@ -108,7 +108,7 @@ Tác giả lấy dữ liệu từ [Time-Series-Library (TimesNet)](https://githu
 | E1 | Thống kê dataset: số điểm, số chiều, tỉ lệ bất thường | Bảng 1 | 0 | Hoàng Khang |
 | E2 | DAMR như code công bố, lưu điểm mỗi epoch và checkpoint | Bảng 2 (dòng DAMR) | 9 (3 dataset × 3 seed) | Mạnh Hùng |
 | E3a | Nhóm A: DeepSVDD, ALOCC, USAD, GANF, MTGFlow | Bảng 2 | 45 | Hoàng Khang |
-| E3b | Nhóm B: Anomaly Transformer, DCdetector, TFMAE, MtsCID | Bảng 2 | 36 | Huy Hoàng |
+| E3b | Nhóm B: Anomaly Transformer, DCdetector, TFMAE, MtsCID | Bảng 2 | 36 | Minh Hoàng |
 | E4 | Ablation: w/o MSASB, w/o MSASB(G), w/o MSASB(L), τ = 0.25 cố định, bỏ cả temperature và multi-head | Bảng 3, 4 | 45 (5 × 3 × 3) | Mạnh Hùng |
 | E5 | Nhiễu Gaussian trên tập test PSM | Hình 5 | 0 (dùng checkpoint) | Huy Khang |
 | E6 | t-SNE trên MSL; độ tương đồng giữa các head trên PSM | Hình 3, Bảng 5 | 0 (dùng checkpoint) | Huy Khang |
@@ -213,7 +213,7 @@ Tham khảo thêm repo DAMR-reproduce, vốn đã nêu một số khác biệt t
 - Không push thẳng lên `main`; mỗi người làm trên nhánh riêng, ví dụ `e2-damr`, `e3a-baselines`, `e3b-baselines`, `e5-noise`.
 - Mở Pull Request để review chéo trước khi merge:
   - Mạnh Hùng review code của Hoàng Khang và Huy Khang.
-  - Hoàng Khang review code của Mạnh Hùng và Huy Hoàng.
+  - Hoàng Khang review code của Mạnh Hùng và Minh Hoàng.
 - Commit message ngắn gọn, ghi mã thí nghiệm, ví dụ: `E2: lưu điểm test mỗi epoch`.
 - Không commit `data/`, `checkpoints/` và log lớn (đã có trong `.gitignore`). Checkpoint chia sẻ qua `<Google Drive / nơi lưu trữ chung>`.
 
