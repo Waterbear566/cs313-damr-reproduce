@@ -1,0 +1,7 @@
+dataset,split,n_points,n_features,dtype,nan_values,features_with_nan,rows_with_nan,inf_values,anomaly_points,anomaly_rate_point,anomaly_rate_pct,label_status
+PSM,train,132481,25,float64,4195,12,2697,0,,,,normal_by_benchmark_protocol_not_measured
+PSM,test,87841,25,float64,0,0,0,0,24381.0,0.27755831559294636,27.755831559294634,provided
+MSL,train,58317,55,float64,0,0,0,0,,,,normal_by_benchmark_protocol_not_measured
+MSL,test,73729,55,float64,0,0,0,0,7766.0,0.1053316876669967,10.53316876669967,provided
+SMD,train,708405,38,float32,0,0,0,0,,,,normal_by_benchmark_protocol_not_measured
+SMD,test,708420,38,float32,0,0,0,0,29444.0,0.04156291484832764,4.156291484832764,provided

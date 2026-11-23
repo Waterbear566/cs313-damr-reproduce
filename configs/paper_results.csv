@@ -2,3 +2,18 @@ model,variant,dataset,metric,value,source
 DAMR,full,PSM,auroc,78.6,Bảng 2
 DAMR,full,MSL,auroc,72.5,Bảng 2
 DAMR,full,SMD,auroc,79.3,Bảng 2
+MTGFlow,full,PSM,auroc,75.7,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
+MTGFlow,full,MSL,auroc,67.8,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
+MTGFlow,full,SMD,auroc,66.9,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
+GANF,full,PSM,auroc,72.5,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
+GANF,full,MSL,auroc,60.8,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
+GANF,full,SMD,auroc,68.7,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
+USAD,full,PSM,auroc,70.2,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
+USAD,full,MSL,auroc,58.5,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
+USAD,full,SMD,auroc,75.4,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
+DeepSVDD,full,PSM,auroc,75.1,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
+DeepSVDD,full,MSL,auroc,52.9,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
+DeepSVDD,full,SMD,auroc,77.6,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
+ALOCC,full,PSM,auroc,68.9,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
+ALOCC,full,MSL,auroc,57.3,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
+ALOCC,full,SMD,auroc,58.3,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
