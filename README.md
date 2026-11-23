@@ -91,7 +91,7 @@ pip install -r requirements.txt
 | SWaT | Xin quyền từ iTrust | 4 – nếu được cấp kịp |
 | WADI | Xin quyền từ iTrust | 5 – nếu được cấp kịp |
 
-Tác giả lấy dữ liệu từ [Time-Series-Library (TimesNet)](https://github.com/thuml/Time-Series-Library). Script gốc đọc dữ liệu ở `DAMR/data/psm`, `DAMR/data/msl`, `DAMR/data/smd` (chữ thường). Thư mục `data/` không được commit lên GitHub.
+Link tải dữ liệu, code baseline và môi trường: [`docs/tai_nguyen.md`](docs/tai_nguyen.md). Tác giả lấy dữ liệu từ [Time-Series-Library (TimesNet)](https://github.com/thuml/Time-Series-Library). Script gốc đọc dữ liệu ở `DAMR/data/psm`, `DAMR/data/msl`, `DAMR/data/smd` (chữ thường). Thư mục `data/` không được commit lên GitHub.
 
 **Tiền xử lý thống nhất cho mọi phương pháp:**
 - Cùng file dữ liệu và cùng cách chuẩn hóa.
