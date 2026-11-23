@@ -1,0 +1,60 @@
+# Pipeline thí nghiệm
+
+Mọi phương pháp đi qua cùng một đường: cùng dữ liệu → cùng cửa sổ và cách chia → điểm bất thường mỗi epoch →
+cùng hàm metric → một schema CSV → một script tổng hợp. Chỉ phần mô hình là khác nhau.
+
+```
+ DAMR/data/<ds>/  ──►  [1] Kiểm tra dữ liệu ───────────────────────────►  Bảng 1 (E1)
+        │               scripts/check_data.py
+        ▼
+ [2] Chuẩn hóa + cửa sổ 60/10 + chia val 20% theo seed
+     DAMR: DAMR/data_loader.py      Baseline: common/data.py (gọi lại đúng các lớp đó)
+        │
+        ▼
+ [3] Huấn luyện, chấm điểm test + val mỗi epoch
+     DAMR: DAMR/main.py --log_extra=True (scripts/run_e2.sh)
+     Baseline: baselines/<Tên>/run.py (mẫu: baselines/_template/run.py)
+        │
+        ▼
+ [4] common/results.record_epoch  ──►  checkpoints/<E>/.../scores/*.npy   (dùng lại cho E5, E6)
+     (metric: common/metrics.py)   ──►  results/<E>_<model>.csv            (mỗi epoch một dòng)
+        │
+        ▼
+ [5] scripts/summarize.py  ──►  results/summary.csv  (mean ± std 3 seed, best_test và last, cạnh số bài báo)
+        │
+        ▼
+ [6] Script vẽ hình/bảng  ──►  figures/   (chưa có)
+```
+
+## Trạng thái từng khâu
+
+| Khâu | File | Trạng thái |
+|---|---|---|
+| 1. Kiểm tra dữ liệu, thống kê Bảng 1 | `scripts/check_data.py` | Có, chưa chạy trên dữ liệu thật |
+| 2. Tiền xử lý cho DAMR | `DAMR/data_loader.py` (code gốc) | Có |
+| 2. Tiền xử lý cho baseline | `common/data.py` | Có. Đã kiểm tra vị trí validation trùng code gốc với seed 0, 1, 2, 16 |
+| 3. Chạy DAMR (E2) | `scripts/run_e2.sh`, `notebooks/stage1_kaggle_smoke.ipynb` | Có, chưa chạy thật |
+| 3. Biến thể ablation (E4) | `DAMR/model.py`, `DAMR/main.py` | Thiếu cờ cho MSASB(G), MSASB(L), τ cố định |
+| 3. Baseline (E3a, E3b) | `baselines/_template/run.py`, `baselines/README.md` | Có mẫu, chưa có baseline nào |
+| 3. Nhiễu (E5), t-SNE (E6) | — | Chưa có |
+| 4. Metric và ghi kết quả | `common/metrics.py`, `common/results.py` | Có, đã thử bằng dữ liệu giả |
+| 5. Tổng hợp | `scripts/summarize.py`, `configs/paper_results.csv` | Có, đã thử bằng dữ liệu giả. Số bài báo mới có AUROC của DAMR |
+| 6. Hình và bảng | — | Chưa có (Trung Hiếu) |
+
+## Quy ước metric
+
+- Theo **cửa sổ**, không dùng point adjustment. AUROC và AUPRC là chính.
+- F1 và `flagged_rate` dùng ngưỡng = **phân vị 99% của điểm validation** (validation chỉ có dữ liệu bình
+  thường). Không dùng tập test để chọn ngưỡng.
+- `summarize.py` báo cáo hai cách chọn epoch: `best_test` (như code gốc, nhìn tập test) và `last` (epoch cuối).
+- Std là độ lệch chuẩn mẫu (ddof = 1) trên 3 seed. Metric nhân 100.
+
+## Chạy cả đường cho DAMR
+
+```bash
+python scripts/check_data.py --root DAMR/data
+bash scripts/run_e2.sh PSM 0
+python scripts/summarize.py results/E2_DAMR.csv
+```
+
+Chạy lại một lần chạy thì xóa các dòng cũ của nó trong CSV trước, nếu không `summarize.py` sẽ báo trùng epoch.

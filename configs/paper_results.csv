@@ -1,0 +1,4 @@
+model,variant,dataset,metric,value,source
+DAMR,full,PSM,auroc,78.6,Bảng 2
+DAMR,full,MSL,auroc,72.5,Bảng 2
+DAMR,full,SMD,auroc,79.3,Bảng 2

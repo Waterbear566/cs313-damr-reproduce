@@ -177,7 +177,9 @@ model,variant,dataset,seed,noise,epoch,auroc,auprc,f1,flagged_rate,runtime_s
 | `flagged_rate` | Tỉ lệ cửa sổ bị gán bất thường |
 | `runtime_s` | Thời gian chạy (giây) |
 
-**Thước đo:** AUROC theo cửa sổ (như bài báo) và AUPRC là chính, F1 là phụ. Báo cáo mean ± std trên 3 seed.
+**Thước đo:** AUROC theo cửa sổ (như bài báo) và AUPRC là chính, F1 là phụ (ngưỡng = phân vị 99% điểm validation). Báo cáo mean ± std trên 3 seed.
+
+Toàn bộ đường đi từ dữ liệu tới bảng tổng hợp, và khâu nào đã có, xem [`docs/pipeline.md`](docs/pipeline.md). Tổng hợp: `python scripts/summarize.py`.
 
 **Quy tắc:**
 - Mọi bảng và hình được sinh bằng script từ `results/`, xuất PDF hoặc SVG. **Không nhập số bằng tay.**
