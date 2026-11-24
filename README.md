@@ -149,7 +149,7 @@ Script bật các cờ nhóm thêm vào `main.py` (mặc định đều tắt, n
 
 Kết quả: `results/E2_DAMR.csv`, log ở `logs/E2_<dataset>_seed<k>.log`, checkpoint ở `checkpoints/E2/<dataset>_seed_<k>/saved_models/` (`model.pt` = epoch tốt nhất theo test như code gốc, `model_last.pt` = epoch cuối).
 
-**Trên Kaggle:** mở `notebooks/stage1_kaggle_smoke.ipynb`, chọn GPU T4 và bật Internet. Notebook cài thư viện, tự tìm dữ liệu trong `/kaggle/input`, kiểm tra định dạng (`scripts/check_data.py`), chạy PSM 1 epoch và ước lượng tổng thời gian.
+**Trên Kaggle:** mở `notebooks/stage1_kaggle_smoke.ipynb`, chọn GPU T4 và bật Internet. Notebook cài thư viện, tự tìm dữ liệu trong `/kaggle/input`, kiểm tra định dạng (`scripts/check_data.py`), chạy PSM 1 epoch và ước lượng tổng thời gian. Chạy E2 thật bằng `notebooks/e2_kaggle_run.ipynb` ở chế độ **Save & Run All (Commit)**; kết quả nằm trong `e2_outputs.zip` ở tab Output.
 
 **Kiểm tra dữ liệu:** `python scripts/check_data.py --root DAMR/data` kiểm tra tên file, số chiều, nhãn, và in thống kê kiểu Bảng 1.
 
