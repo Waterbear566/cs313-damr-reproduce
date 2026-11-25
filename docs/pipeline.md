@@ -41,6 +41,18 @@ cùng hàm metric → một schema CSV → một script tổng hợp. Chỉ ph�
 | 5. Tổng hợp | `scripts/summarize.py`, `configs/paper_results.csv` | Có, đã thử bằng dữ liệu giả. Số bài báo mới có AUROC của DAMR |
 | 6. Hình và bảng | — | Chưa có (Trung Hiếu) |
 
+## Quy ước seed
+
+| Mục | Quy ước |
+|---|---|
+| Seed chung (bảng so sánh, ablation) | **16, 17, 18** cho mọi phương pháp và dataset. 16 là seed tác giả dùng trong `DAMR/run/run_*.sh` |
+| DAMR (E2) | Chạy **16–25** cho đủ 10 lần như bài báo; bảng chính lấy 16, 17, 18 (`summarize.py --seeds 16 17 18`) |
+| Thí nghiệm phụ | E2 với seed 0, 1, 2 (chạy trước khi đổi quy ước): `results/E2_DAMR_seeds012.csv`, dùng để xem độ nhạy theo seed |
+| Seed điều khiển | `random`, `numpy`, `torch` (CPU + CUDA), đặt trước khi nạp dữ liệu; vị trí đoạn validation cũng do seed quyết định |
+| Tên | thư mục `<dataset>_seed_<k>`, cột CSV `seed` |
+
+Cùng seed vẫn lệch nhỏ giữa các lần chạy (code không bật `cudnn.deterministic`; đo được khoảng 0.02 điểm AUROC trên PSM).
+
 ## Quy ước metric
 
 - Theo **cửa sổ**, không dùng point adjustment. AUROC và AUPRC là chính.

@@ -1,7 +1,7 @@
 """Mẫu chạy một baseline theo pipeline chung. Sao chép thư mục này thành baselines/<TênPhươngPháp>/.
 
 Chạy từ gốc repo:
-    python baselines/<Tên>/run.py --dataset PSM --data_path DAMR/data/psm --seed 0 --device cuda:0
+    python baselines/<Tên>/run.py --dataset PSM --data_path DAMR/data/psm --seed 16 --device cuda:0
 
 Chỉ cần sửa 3 chỗ đánh dấu TODO: dựng mô hình, train một epoch, chấm điểm.
 Không đổi cửa sổ, chuẩn hóa, cách chia validation hay hàm metric: những thứ đó lấy từ common/.
@@ -46,7 +46,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dataset", required=True)
     ap.add_argument("--data_path", required=True)
-    ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--seed", type=int, default=16)  # seed chung: 16, 17, 18
     ap.add_argument("--device", default="cuda:0")
     ap.add_argument("--epochs", type=int, default=10)       # giữ mặc định của repo gốc baseline
     ap.add_argument("--batch_size", type=int, default=128)  # giữ mặc định của repo gốc baseline

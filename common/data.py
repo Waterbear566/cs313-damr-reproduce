@@ -4,7 +4,7 @@ validation như DAMR.
 Cách dùng trong một baseline:
 
     from common.data import load_split
-    sp = load_split("PSM", "DAMR/data/psm", seed=0)
+    sp = load_split("PSM", "DAMR/data/psm", seed=16)
     sp.train, sp.val, sp.test          # torch Dataset, mỗi phần tử (x, label), x có dạng (sensor, thời gian)
     sp.test_labels                     # nhãn cửa sổ test, dạng (n_test,)
     X = sp.to_numpy("train", layout="TC")   # mảng (n, thời gian, sensor) nếu baseline cần
@@ -26,7 +26,7 @@ DAMR_DIR = os.path.join(ROOT, "DAMR")
 WIN_SIZE = 60
 STEP = 10
 VAL_RATIO = 0.2
-SEEDS = (0, 1, 2)
+SEEDS = (16, 17, 18)        # seed chung của nhóm; DAMR chạy thêm 19–25
 DATASETS = ("PSM", "MSL", "SMD", "SWaT", "WADI")
 
 
