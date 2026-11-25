@@ -1,6 +1,6 @@
 # Tiến độ và công việc – phần code (Nhóm 5)
 
-Cập nhật: 23/11/2026. File này dành cho những người làm code trong repo. Ai xong việc hoặc đổi trạng thái thì sửa file này trong PR của mình.
+Cập nhật: 25/11/2026. File này dành cho những người làm code trong repo. Ai xong việc hoặc đổi trạng thái thì sửa file này trong PR của mình.
 
 Ký hiệu: ✅ xong · 🟡 đang làm · ⬜ chưa bắt đầu · ⏸ đang chờ việc khác
 
@@ -19,7 +19,7 @@ Ký hiệu: ✅ xong · 🟡 đang làm · ⬜ chưa bắt đầu · ⏸ đang c
 | Mã | Thí nghiệm | Người làm | Số lần train | Trạng thái | Ghi chú |
 |---|---|---|---|---|---|
 | E1 | Thống kê dataset (Bảng 1) | Hoàng Khang | 0 | 🟡 | Đã có `scripts/check_data.py`, cần dữ liệu để chạy |
-| E2 | DAMR gốc, 3 dataset × 3 seed | Mạnh Hùng, Huy Khang | 9 | 🟡 | Code xong, chưa chạy |
+| E2 | DAMR gốc, 3 dataset × 10 seed (16–25) | Mạnh Hùng, Huy Khang | 30 | 🟡 | Seed 0, 1, 2 đã chạy (thí nghiệm phụ, `results/E2_DAMR_seeds012.csv`); đang chạy lại với seed 16–25 |
 | E3a | DeepSVDD, ALOCC, USAD, GANF, MTGFlow | Hoàng Khang | 45 | ⬜ | |
 | E3b | Anomaly Transformer, DCdetector, TFMAE, MtsCID | Minh Hoàng | 36 | ⬜ | |
 | E4 | Ablation (5 biến thể) | Mạnh Hùng, Huy Khang | 45 | ⬜ | Thiếu cờ cho MSASB(G), MSASB(L), τ cố định |
@@ -36,8 +36,9 @@ Tổng cộng khoảng 135 lần train. Cần ước lượng thời gian sau kh
 - [x] Dựng repo, README, `.gitignore`, `requirements.txt`
 - [x] Thêm cờ ghi log (`--log_extra`, `--save_dir`, `--variant`, `--results_csv`), `common/results.py`, `scripts/run_e2.sh`
 - [x] Notebook `notebooks/stage1_kaggle_smoke.ipynb`
-- [ ] Merge `e2-damr-logging` và `docs-doi-vai-tro` vào `main`
-- [ ] Chạy E2 trên PSM, MSL, SMD (seed 0, 1, 2)
+- [x] Merge `e2-damr-logging` và `docs-doi-vai-tro` vào `main`
+- [x] Chạy E2 trên PSM, MSL, SMD với seed 0, 1, 2 (thí nghiệm phụ về độ nhạy theo seed)
+- [ ] Chạy lại E2 với seed 16–25 (seed chung 16, 17, 18; đủ 10 lần như bài báo)
 - [ ] Thêm cờ cho MSASB(G), MSASB(L), τ = 0.25 cố định, rồi chạy E4
 - [ ] Review PR của Hoàng Khang và Huy Khang
 
