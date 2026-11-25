@@ -215,7 +215,7 @@ Tham khảo thêm repo DAMR-reproduce, vốn đã nêu một số khác biệt t
   - Mạnh Hùng review code của Hoàng Khang và Huy Khang.
   - Hoàng Khang review code của Mạnh Hùng và Minh Hoàng.
 - Commit message ngắn gọn, ghi mã thí nghiệm, ví dụ: `E2: lưu điểm test mỗi epoch`.
-- Không commit `data/`, `checkpoints/` và log lớn (đã có trong `.gitignore`). Checkpoint chia sẻ qua `<Google Drive / nơi lưu trữ chung>`.
+- Không commit `data/`, `checkpoints/` và log lớn (đã có trong `.gitignore`). Checkpoint, log và dữ liệu PSM/MSL/SMD chia sẻ qua [Drive chung CS313_Nhom5](https://drive.google.com/drive/folders/1GFjHkxzl4lbacWTnEqqMfHJ2ybcXh9TP?usp=sharing); cấu trúc giống hệt repo, đọc `DOC_TRUOC.txt` trên Drive trước khi upload.
 
 ---
 

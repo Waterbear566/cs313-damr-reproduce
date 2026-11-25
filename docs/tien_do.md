@@ -96,5 +96,5 @@ results/*.csv ──► Script vẽ hình/bảng ──► (giao cho nhóm báo 
 - [ ] Điền cột "Bài báo nói gì" trong `code_vs_paper.md` (đang ghi `<cần đối chiếu>`) sau khi nhóm báo cáo đọc bài báo
 - [ ] Xin quyền dữ liệu SWaT, WADI từ iTrust (làm nếu được cấp kịp)
 - [ ] Điền phiên bản CUDA và GPU vào README
-- [ ] Tạo thư mục Google Drive chung để lưu checkpoint, điền link vào README
+- [x] Tạo thư mục Google Drive chung để lưu checkpoint, điền link vào README ([CS313_Nhom5](https://drive.google.com/drive/folders/1GFjHkxzl4lbacWTnEqqMfHJ2ybcXh9TP?usp=sharing))
 - [ ] Chốt deadline cho từng giai đoạn: `<điền>`
