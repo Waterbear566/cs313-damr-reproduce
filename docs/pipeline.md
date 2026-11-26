@@ -33,7 +33,7 @@ cùng hàm metric → một schema CSV → một script tổng hợp. Chỉ ph�
 | 1. Kiểm tra dữ liệu, thống kê Bảng 1 | `scripts/check_data.py` | Đã chạy trên PSM, MSL, SMD (bản TSLib), khớp số chuẩn |
 | 2. Tiền xử lý cho DAMR | `DAMR/data_loader.py` (code gốc) | Có |
 | 2. Tiền xử lý cho baseline | `common/data.py` | Có. Đã kiểm tra vị trí validation trùng code gốc với seed 0, 1, 2, 16 |
-| 3. Chạy DAMR (E2) | `scripts/run_e2.sh`, `notebooks/e2_kaggle_run.ipynb` | Seed 0, 1, 2 đã chạy (thí nghiệm phụ); seed 16–25 chạy lại trên Kaggle |
+| 3. Chạy DAMR (E2) | `scripts/run_e2.sh`, `notebooks/e2_kaggle_run.ipynb` | Xong: seed 16–25 (`results/E2_DAMR.csv`) và seed 0, 1, 2 (thí nghiệm phụ) |
 | 3. Biến thể ablation (E4) | `scripts/run_e4.sh`, cờ `--global_filter`, `--fixed_temp` | Có cờ cho đủ 5 biến thể, đã đối chiếu bài báo (mục 12 `code_vs_paper.md`); chưa chạy |
 | 3. Baseline (E3a, E3b) | `baselines/_template/run.py`, `baselines/README.md` | Có mẫu, chưa có baseline nào |
 | 3. Nhiễu (E5), t-SNE (E6) | — | Chưa có |
