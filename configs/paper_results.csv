@@ -1,19 +1,80 @@
-model,variant,dataset,metric,value,source
-DAMR,full,PSM,auroc,78.6,Bảng 2
-DAMR,full,MSL,auroc,72.5,Bảng 2
-DAMR,full,SMD,auroc,79.3,Bảng 2
-MTGFlow,full,PSM,auroc,75.7,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
-MTGFlow,full,MSL,auroc,67.8,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
-MTGFlow,full,SMD,auroc,66.9,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
-GANF,full,PSM,auroc,72.5,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
-GANF,full,MSL,auroc,60.8,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
-GANF,full,SMD,auroc,68.7,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
-USAD,full,PSM,auroc,70.2,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
-USAD,full,MSL,auroc,58.5,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
-USAD,full,SMD,auroc,75.4,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
-DeepSVDD,full,PSM,auroc,75.1,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
-DeepSVDD,full,MSL,auroc,52.9,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
-DeepSVDD,full,SMD,auroc,77.6,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
-ALOCC,full,PSM,auroc,68.9,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
-ALOCC,full,MSL,auroc,57.3,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
-ALOCC,full,SMD,auroc,58.3,Bảng 2 (chép từ bàn giao Hoàng Khang; cần đối chiếu)
+model,variant,dataset,metric,value,std,source
+DeepSVDD,full,SWaT,auroc,82.2,1.5,Bảng 2
+DeepSVDD,full,WADI,auroc,50.7,1.9,Bảng 2
+DeepSVDD,full,PSM,auroc,75.1,1.2,Bảng 2
+DeepSVDD,full,MSL,auroc,52.9,1.8,Bảng 2
+DeepSVDD,full,SMD,auroc,77.6,1.0,Bảng 2
+ALOCC,full,SWaT,auroc,82.7,1.3,Bảng 2
+ALOCC,full,WADI,auroc,70.6,1.2,Bảng 2
+ALOCC,full,PSM,auroc,68.9,1.4,Bảng 2
+ALOCC,full,MSL,auroc,57.3,1.2,Bảng 2
+ALOCC,full,SMD,auroc,58.3,1.2,Bảng 2
+USAD,full,SWaT,auroc,68.9,1.4,Bảng 2
+USAD,full,WADI,auroc,49.2,2.0,Bảng 2
+USAD,full,PSM,auroc,70.2,1.3,Bảng 2
+USAD,full,MSL,auroc,58.5,1.1,Bảng 2
+USAD,full,SMD,auroc,75.4,1.1,Bảng 2
+GANF,full,SWaT,auroc,84.4,1.2,Bảng 2
+GANF,full,WADI,auroc,49.8,1.8,Bảng 2
+GANF,full,PSM,auroc,72.5,1.1,Bảng 2
+GANF,full,MSL,auroc,60.8,0.9,Bảng 2
+GANF,full,SMD,auroc,68.7,1.4,Bảng 2
+AnomalyTransformer,full,SWaT,auroc,81.1,1.3,Bảng 2
+AnomalyTransformer,full,WADI,auroc,46.8,1.8,Bảng 2
+AnomalyTransformer,full,PSM,auroc,69.2,1.1,Bảng 2
+AnomalyTransformer,full,MSL,auroc,59.1,0.9,Bảng 2
+AnomalyTransformer,full,SMD,auroc,77.2,0.9,Bảng 2
+DCdetector,full,SWaT,auroc,59.8,1.4,Bảng 2
+DCdetector,full,WADI,auroc,45.7,1.9,Bảng 2
+DCdetector,full,PSM,auroc,58.1,1.4,Bảng 2
+DCdetector,full,MSL,auroc,58.7,0.8,Bảng 2
+DCdetector,full,SMD,auroc,50.2,1.5,Bảng 2
+MTGFlow,full,SWaT,auroc,84.7,1.4,Bảng 2
+MTGFlow,full,WADI,auroc,50.2,1.7,Bảng 2
+MTGFlow,full,PSM,auroc,75.7,1.8,Bảng 2
+MTGFlow,full,MSL,auroc,67.8,1.3,Bảng 2
+MTGFlow,full,SMD,auroc,66.9,1.6,Bảng 2
+TFMAE,full,SWaT,auroc,76.8,0.9,Bảng 2
+TFMAE,full,WADI,auroc,56.5,1.5,Bảng 2
+TFMAE,full,PSM,auroc,58.6,1.4,Bảng 2
+TFMAE,full,MSL,auroc,55.3,1.2,Bảng 2
+TFMAE,full,SMD,auroc,64.8,1.3,Bảng 2
+MtsCID,full,SWaT,auroc,80.1,0.9,Bảng 2
+MtsCID,full,WADI,auroc,51.8,1.9,Bảng 2
+MtsCID,full,PSM,auroc,69.6,0.8,Bảng 2
+MtsCID,full,MSL,auroc,57.9,1.1,Bảng 2
+MtsCID,full,SMD,auroc,73.8,1.3,Bảng 2
+DAMR,full,SWaT,auroc,88.3,0.7,Bảng 2
+DAMR,full,WADI,auroc,76.3,1.7,Bảng 2
+DAMR,full,PSM,auroc,78.6,0.9,Bảng 2
+DAMR,full,MSL,auroc,72.5,0.9,Bảng 2
+DAMR,full,SMD,auroc,79.3,0.8,Bảng 2
+DAMR,wo_MSASB,SWaT,auroc,87.3,0.9,Bảng 3
+DAMR,wo_MSASB,WADI,auroc,74.9,1.8,Bảng 3
+DAMR,wo_MSASB,PSM,auroc,78.4,0.9,Bảng 3
+DAMR,wo_MSASB,MSL,auroc,71.6,1.0,Bảng 3
+DAMR,wo_MSASB,SMD,auroc,79.1,1.2,Bảng 3
+DAMR,wo_MSASB_G,SWaT,auroc,86.6,0.9,Bảng 3
+DAMR,wo_MSASB_G,WADI,auroc,75.0,2.3,Bảng 3
+DAMR,wo_MSASB_G,PSM,auroc,77.9,0.8,Bảng 3
+DAMR,wo_MSASB_G,MSL,auroc,70.4,0.9,Bảng 3
+DAMR,wo_MSASB_G,SMD,auroc,79.2,1.1,Bảng 3
+DAMR,wo_MSASB_L,SWaT,auroc,87.1,0.7,Bảng 3
+DAMR,wo_MSASB_L,WADI,auroc,72.5,1.8,Bảng 3
+DAMR,wo_MSASB_L,PSM,auroc,78.5,0.9,Bảng 3
+DAMR,wo_MSASB_L,MSL,auroc,71.1,0.8,Bảng 3
+DAMR,wo_MSASB_L,SMD,auroc,79.2,1.0,Bảng 3
+DAMR,fixed_tau_0.25,SWaT,auroc,86.6,1.1,Bảng 4
+DAMR,fixed_tau_0.25,WADI,auroc,75.9,1.3,Bảng 4
+DAMR,fixed_tau_0.25,PSM,auroc,77.3,1.1,Bảng 4
+DAMR,fixed_tau_0.25,MSL,auroc,67.9,1.1,Bảng 4
+DAMR,fixed_tau_0.25,SMD,auroc,79.1,1.1,Bảng 4
+DAMR,wo_temp_multihead,SWaT,auroc,86.1,1.1,Bảng 4
+DAMR,wo_temp_multihead,WADI,auroc,75.3,1.3,Bảng 4
+DAMR,wo_temp_multihead,PSM,auroc,77.6,1.1,Bảng 4
+DAMR,wo_temp_multihead,MSL,auroc,67.6,1.1,Bảng 4
+DAMR,wo_temp_multihead,SMD,auroc,79.1,1.2,Bảng 4
+DAMR,full_knn10pct,SWaT,auroc,88.2,,"Bảng 7 (tham chiếu kNN lấy mẫu 10%, như code)"
+DAMR,full_knn10pct,PSM,auroc,78.5,,"Bảng 7 (tham chiếu kNN lấy mẫu 10%, như code)"
+DAMR,full_knn10pct,MSL,auroc,72.7,,"Bảng 7 (tham chiếu kNN lấy mẫu 10%, như code)"
+DAMR,full_knn10pct,SMD,auroc,79.5,,"Bảng 7 (tham chiếu kNN lấy mẫu 10%, như code)"

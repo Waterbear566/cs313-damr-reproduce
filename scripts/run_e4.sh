@@ -10,15 +10,15 @@ GPU=${2:-0}
 EPOCHS=${3:-}
 SEEDS=${SEEDS:-"16 17 18"}
 VARIANTS=${VARIANTS:-"wo_MSASB wo_MSASB_G wo_MSASB_L fixed_tau_0.25 wo_temp_multihead"}
-# tau dùng cho biến thể bỏ cả temperature và multi-head. CẦN ĐỐI CHIẾU BÀI BÁO (docs/code_vs_paper.md mục 12).
+# tau cố định cho hai biến thể Bảng 4: bài báo dùng tau = 0.25 (mục 4.3; docs/code_vs_paper.md mục 12).
 TAU_NOTEMP=${TAU_NOTEMP:-0.25}
 
 declare -A VARIANT_FLAGS=(
   [wo_MSASB]="--MSASB=False"                                  # bỏ cả khối MSASB
-  [wo_MSASB_G]="--global_filter=False"                        # bỏ nhánh lọc toàn cục (giả định G = global)
-  [wo_MSASB_L]="--adaptive_filter=False"                      # bỏ nhánh lọc thích nghi (giả định L = local/adaptive)
-  [fixed_tau_0.25]="--fixed_temp=0.25"                        # tau cố định thay cho AdaptiveTemperature
-  [wo_temp_multihead]="--num_heads=1 --fixed_temp=$TAU_NOTEMP" # 1 head, tau cố định
+  [wo_MSASB_G]="--global_filter=False"                        # Bảng 3 "w/o MSASB(G)": bỏ bộ lọc toàn cục W_G
+  [wo_MSASB_L]="--adaptive_filter=False"                      # Bảng 3 "w/o MSASB(L)": bỏ bộ lọc cục bộ W_L trên F_filtered
+  [fixed_tau_0.25]="--fixed_temp=0.25"                        # Bảng 4 "w/o α(τ)": tau = 0.25 cố định
+  [wo_temp_multihead]="--num_heads=1 --fixed_temp=$TAU_NOTEMP" # Bảng 4 "w/o α(τ) & MPs": 1 head, tau cố định
 )
 
 case $DATASET in        # learning rate tác giả dùng trong DAMR/run/run_*.sh
