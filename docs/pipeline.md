@@ -56,10 +56,14 @@ Cùng seed vẫn lệch nhỏ giữa các lần chạy (code không bật `cudnn
 ## Quy ước metric
 
 - Theo **cửa sổ**, không dùng point adjustment. AUROC và AUPRC là chính.
-- F1 và `flagged_rate` dùng ngưỡng = **phân vị 99% của điểm validation** (validation chỉ có dữ liệu bình
-  thường). Không dùng tập test để chọn ngưỡng.
+- F1 và `flagged_rate` dùng ngưỡng = **phân vị 99% (P99) của điểm validation** (validation chỉ có dữ liệu bình
+  thường), tính riêng cho từng mô hình. Không dùng tập test để chọn ngưỡng. **Nhóm đã chốt P99 (26/11/2026).**
+  Không dùng ngưỡng cố định (0.5, 0.8…): mỗi mô hình có thang điểm khác nhau (điểm DAMR là khoảng cách kNN, cỡ 0.01).
+  Với DAMR, P99 cho F1 rất thấp trên PSM (điểm test thấp hơn điểm đoạn validation nên ngưỡng nằm quá cao);
+  báo cáo cần giải thích điều này.
 - `summarize.py` báo cáo hai cách chọn epoch: `best_test` (như code gốc, nhìn tập test) và `last` (epoch cuối).
-- Std là độ lệch chuẩn mẫu (ddof = 1) trên 3 seed. Metric nhân 100.
+  **Bảng so sánh chính dùng `last` cho mọi mô hình**; `best_test` của DAMR đưa vào bảng phụ.
+- Std là độ lệch chuẩn mẫu (ddof = 1) trên các seed. Metric nhân 100.
 
 ## Chạy cả đường cho DAMR
 
