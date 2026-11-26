@@ -87,7 +87,13 @@ def summarize(picked, paper):
                 vals = [100 * v for v in vals if v is not None]
                 row[f"{m}_mean"] = round(statistics.mean(vals), 2) if vals else ""
                 row[f"{m}_std"] = round(statistics.stdev(vals), 2) if len(vals) > 1 else ""
-            p = paper.get((model, variant, dataset, "auroc")) if noise in ("0", "0.0") else None
+            p = None
+            if noise in ("0", "0.0"):
+                p = paper.get((model, variant, dataset, "auroc"))
+                if p is None and model != "DAMR":
+                    # Baseline ghi tên biến thể cài đặt (vd. USAD/shared_standard_sigmoid), bài báo chỉ có bản "full".
+                    # Không áp dụng cho DAMR: biến thể của DAMR là ablation (E4), không được so với số "full".
+                    p = paper.get((model, "full", dataset, "auroc"))
             row["paper_auroc"] = "" if p is None else p
             row["diff_auroc"] = "" if p is None or row["auroc_mean"] == "" else round(row["auroc_mean"] - p, 2)
             table.append(row)

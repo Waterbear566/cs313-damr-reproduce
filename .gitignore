@@ -1,6 +1,9 @@
 # Dữ liệu và mô hình
 data/
 checkpoints/
+damr_data.zip
+tslib_download/
+download/
 *.pt
 *.pth
 *.ckpt
