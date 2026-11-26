@@ -46,6 +46,10 @@ Lưu ý:
 - Trên Gitee có các bản sao TFMAE và MtsCID của tài khoản `wu-nil`. Đó không phải repo gốc, không dùng.
 - Khi chép code baseline vào `baselines/<Tên>/`, ghi link repo gốc và commit vào `baselines/<Tên>/README.md` (xem [`baselines/README.md`](../baselines/README.md)).
 
+## Lưu trữ chung
+
+Checkpoint, log và bản sao PSM/MSL/SMD: [Drive CS313_Nhom5](https://drive.google.com/drive/folders/1GFjHkxzl4lbacWTnEqqMfHJ2ybcXh9TP?usp=sharing). Cấu trúc giống hệt repo (`checkpoints/E2/<dataset>_seed_<k>/...`); quy tắc ở `DOC_TRUOC.txt` trên Drive.
+
 ## Môi trường
 
 - Thư viện: [`requirements.txt`](../requirements.txt). Trên Kaggle cần cài thêm `faiss-cpu` và `thop`.
