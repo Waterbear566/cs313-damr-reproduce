@@ -56,7 +56,8 @@ def main(args):
     args.seq_len = args.win_size
 
     model = DAMR(args.seq_len, args.hidden_dim, args.dropout_rate,
-                  args.depth, n_sensor, args.out_channels, args.num_heads, args.MSASB, args.adaptive_filter, args.input_channels, args.conv_hidden)
+                  args.depth, n_sensor, args.out_channels, args.num_heads, args.MSASB, args.adaptive_filter, args.input_channels, args.conv_hidden,
+                  global_filter=args.global_filter)  # [Nhóm 5] E4
     adaptive_temp = AdaptiveTemperature(args.emb_dim, args.num_heads)
     model = model.to(device)
     adaptive_temp = adaptive_temp.to(device)
@@ -105,6 +106,11 @@ if __name__ == "__main__":
 
     parser.add_argument('--MSASB', type=str2bool, default=True)
     parser.add_argument('--adaptive_filter', type=str2bool, default=True)
+    # [Nhóm 5] Cờ cho E4 (ablation). Mặc định = hành vi code gốc.
+    parser.add_argument('--global_filter', type=str2bool, default=True,
+                        help='False: bỏ nhánh lọc toàn cục của MSASB (complex_weights nhân mọi tần số)')
+    parser.add_argument('--fixed_temp', type=float, default=0.0,
+                        help='> 0: dùng nhiệt độ cố định tau thay cho AdaptiveTemperature (vd. 0.25); 0 = như code gốc')
 
     # [Nhóm 5] Cờ ghi log, không ảnh hưởng mô hình. Mặc định = hành vi code gốc.
     parser.add_argument('--log_extra', type=str2bool, default=False,

@@ -130,7 +130,7 @@ python3 main.py --dataset=PSM --data_path=./data/psm --seed=16 --device=cuda:0 -
   2>&1 | tee ../logs/E2_PSM_seed16.log
 ```
 
-Learning rate tác giả dùng cho từng dataset: PSM `1e-4`, MSL `5e-4`, SMD `1e-6`, SWaT `5e-5`, WADI `1e-4`. Về ablation (E4), `main.py` có sẵn cờ `--MSASB`, `--adaptive_filter` và `--num_heads`. Các biến thể w/o MSASB(G), w/o MSASB(L) và τ cố định chưa có cờ riêng, nên cần xem `model.py` để thêm.
+Learning rate tác giả dùng cho từng dataset: PSM `1e-4`, MSL `5e-4`, SMD `1e-6`, SWaT `5e-5`, WADI `1e-4`. Về ablation (E4): `bash scripts/run_e4.sh PSM 0` chạy 5 biến thể × 3 seed. Code gốc có cờ `--MSASB`, `--adaptive_filter`, `--num_heads`; nhóm thêm `--global_filter` và `--fixed_temp` (mặc định giữ nguyên code gốc, xem mục 12 của `docs/code_vs_paper.md`). Bản `full` chính là E2.
 
 **Chạy E2 bằng script của nhóm** (seed 16, 17, 18, learning rate theo tác giả, có ghi log mở rộng; `SEEDS="16 17 ... 25" bash scripts/run_e2.sh ...` để chạy 10 seed):
 

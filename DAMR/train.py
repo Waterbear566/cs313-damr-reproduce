@@ -41,7 +41,8 @@ def trainer(model, adaptive_temp, train_loader, val_loader, test_loader, n_senso
     for epoch in range(0, args.epochs):
 
         epoch_start_time = time.time()
-        train_loss = model_train(model, adaptive_temp, A, optimizer, train_loader, device, args.num_heads)
+        train_loss = model_train(model, adaptive_temp, A, optimizer, train_loader, device, args.num_heads,
+                                 fixed_temp=getattr(args, 'fixed_temp', 0.0))  # [Nhóm 5] E4
         logger.debug('Epoch: {}/{}, Loss: {}'.format(epoch + 1, args.epochs, train_loss))
         # val_auc, _ = model_evaluate(model, A, train_loader, val_loader, device)
         # logger.debug('Epoch: {}/{}, valid AUROC is: {}'.format(epoch + 1, args.epochs, val_auc))
@@ -100,7 +101,7 @@ def _extra_state(epoch, test_auc, adaptive_temp, A, args):
             'A': A.detach().cpu(),
             'args': vars(args)}
 
-def model_train(model, adaptive_temp, A, optimizer, train_loader, device, num_heads):
+def model_train(model, adaptive_temp, A, optimizer, train_loader, device, num_heads, fixed_temp=0.0):
 
     total_loss, total_num = 0.0, 0
     model.train()
@@ -117,7 +118,14 @@ def model_train(model, adaptive_temp, A, optimizer, train_loader, device, num_he
         out_1 = model(aug1, A)
         out_2 = model(aug2, A)
 
-        scaled_similarities, temps = adaptive_temp(out_1, out_2)
+        if fixed_temp > 0:
+            # [Nhóm 5] E4: nhiệt độ cố định cho mọi head, cùng công thức như AdaptiveTemperature.forward
+            # (cosine giữa hai view chia cho tau; tau dùng luôn cho ma trận tương đồng).
+            scaled_similarities = [torch.cosine_similarity(out_1[h], out_2[h]).unsqueeze(-1) / fixed_temp
+                                   for h in range(num_heads)]
+            temps = [fixed_temp] * num_heads
+        else:
+            scaled_similarities, temps = adaptive_temp(out_1, out_2)
 
         batch_loss = 0
         # Sum temperature-scaled contrastive loss across heads.
