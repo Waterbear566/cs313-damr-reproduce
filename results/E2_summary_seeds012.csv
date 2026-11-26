@@ -1,0 +1,7 @@
+model,variant,dataset,noise,selection,n_seeds,seeds,epochs,auroc_mean,auroc_std,auprc_mean,auprc_std,f1_mean,f1_std,flagged_rate_mean,flagged_rate_std,paper_auroc,diff_auroc
+DAMR,full,MSL,0,best_test,3,0 1 2,35 24 33,70.98,1.22,26.36,1.99,16.39,10.94,5.78,4.62,72.5,-1.52
+DAMR,full,MSL,0,last,3,0 1 2,40 40 40,68.93,1.01,25.04,2.4,14.81,8.69,4.56,3.95,72.5,-3.57
+DAMR,full,PSM,0,best_test,3,0 1 2,1 8 32,73.69,3.37,55.42,2.56,8.16,7.45,2.28,2.34,78.6,-4.91
+DAMR,full,PSM,0,last,3,0 1 2,40 40 40,66.27,6.94,44.21,7.99,2.59,2.47,1.09,1.49,78.6,-12.33
+DAMR,full,SMD,0,best_test,3,0 1 2,34 1 14,79.26,0.53,27.34,4.02,29.31,7.19,4.54,2.08,79.3,-0.04
+DAMR,full,SMD,0,last,3,0 1 2,40 40 40,78.4,0.43,26.02,3.73,27.83,9.47,5.36,2.73,79.3,-0.9

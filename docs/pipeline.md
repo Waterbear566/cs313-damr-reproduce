@@ -30,15 +30,15 @@ cùng hàm metric → một schema CSV → một script tổng hợp. Chỉ ph�
 
 | Khâu | File | Trạng thái |
 |---|---|---|
-| 1. Kiểm tra dữ liệu, thống kê Bảng 1 | `scripts/check_data.py` | Có, chưa chạy trên dữ liệu thật |
+| 1. Kiểm tra dữ liệu, thống kê Bảng 1 | `scripts/check_data.py` | Đã chạy trên PSM, MSL, SMD (bản TSLib), khớp số chuẩn |
 | 2. Tiền xử lý cho DAMR | `DAMR/data_loader.py` (code gốc) | Có |
 | 2. Tiền xử lý cho baseline | `common/data.py` | Có. Đã kiểm tra vị trí validation trùng code gốc với seed 0, 1, 2, 16 |
-| 3. Chạy DAMR (E2) | `scripts/run_e2.sh`, `notebooks/stage1_kaggle_smoke.ipynb` | Có, chưa chạy thật |
-| 3. Biến thể ablation (E4) | `DAMR/model.py`, `DAMR/main.py` | Thiếu cờ cho MSASB(G), MSASB(L), τ cố định |
+| 3. Chạy DAMR (E2) | `scripts/run_e2.sh`, `notebooks/e2_kaggle_run.ipynb` | Seed 0, 1, 2 đã chạy (thí nghiệm phụ); seed 16–25 chạy lại trên Kaggle |
+| 3. Biến thể ablation (E4) | `scripts/run_e4.sh`, cờ `--global_filter`, `--fixed_temp` | Có cờ cho đủ 5 biến thể; cách hiểu MSASB(G)/(L) và τ của biến thể cuối cần đối chiếu bài báo |
 | 3. Baseline (E3a, E3b) | `baselines/_template/run.py`, `baselines/README.md` | Có mẫu, chưa có baseline nào |
 | 3. Nhiễu (E5), t-SNE (E6) | — | Chưa có |
-| 4. Metric và ghi kết quả | `common/metrics.py`, `common/results.py` | Có, đã thử bằng dữ liệu giả |
-| 5. Tổng hợp | `scripts/summarize.py`, `configs/paper_results.csv` | Có, đã thử bằng dữ liệu giả. Số bài báo mới có AUROC của DAMR |
+| 4. Metric và ghi kết quả | `common/metrics.py`, `common/results.py` | Có, dùng thật trong E2 |
+| 5. Tổng hợp | `scripts/summarize.py` (`--seeds`), `configs/paper_results.csv` | Có, dùng thật trong E2. Số bài báo mới có AUROC của DAMR |
 | 6. Hình và bảng | — | Chưa có (Trung Hiếu) |
 
 ## Quy ước seed
