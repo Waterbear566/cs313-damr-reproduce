@@ -19,12 +19,12 @@ Ký hiệu: ✅ xong · 🟡 đang làm · ⬜ chưa bắt đầu · ⏸ đang c
 | Mã | Thí nghiệm | Người làm | Số lần train | Trạng thái | Ghi chú |
 |---|---|---|---|---|---|
 | E1 | Thống kê dataset (Bảng 1) | Hoàng Khang | 0 | 🟡 | Đã có `scripts/check_data.py`, cần dữ liệu để chạy |
-| E2 | DAMR gốc, 3 dataset × 10 seed (16–25) | Mạnh Hùng, Huy Khang | 30 | ✅ | `results/E2_DAMR.csv` (16–25), bảng chính `E2_summary.csv` (16–18), `E2_summary_10seeds.csv`; seed 0, 1, 2 là thí nghiệm phụ. Checkpoint trên Drive |
+| E2 | DAMR gốc, 3 dataset × 10 seed (16–25) | Mạnh Hùng, Huy Khang | 30 | ✅ | `results/E2_DAMR.csv` (16–25), bảng chính `E2_summary.csv` (16–18), `E2_summary_10seeds.csv`; seed 0, 1, 2 là thí nghiệm phụ. Checkpoint: Drive chung `checkpoints/E2/` (`e2_outputs_seeds16-25.zip`) |
 | E3a | DeepSVDD, ALOCC, USAD, GANF, MTGFlow | Hoàng Khang | 45 | ⬜ | |
 | E3b | Anomaly Transformer, DCdetector, TFMAE, MtsCID | Minh Hoàng | 36 | ⬜ | |
 | E4 | Ablation (5 biến thể) | Mạnh Hùng, Huy Khang | 45 | ⬜ | Thiếu cờ cho MSASB(G), MSASB(L), τ cố định |
-| E5 | Nhiễu Gaussian trên PSM | Huy Khang | 0 | ⏸ | Checkpoint E2 đã có trên Drive; chờ E3, E4 |
-| E6 | t-SNE trên MSL, độ tương đồng giữa các head | Huy Khang | 0 | 🟡 | Checkpoint E2 (seed 16–25) đã có trên Drive, có thể bắt đầu |
+| E5 | Nhiễu Gaussian trên PSM | Huy Khang | 0 | ⏸ | Checkpoint E2 ở Drive `checkpoints/E2/`; chờ E3, E4 |
+| E6 | t-SNE trên MSL, độ tương đồng giữa các head | Huy Khang | 0 | 🟡 | Có thể bắt đầu khi checkpoint E2 (seed 16–25) lên Drive `checkpoints/E2/` |
 
 Tổng cộng khoảng 135 lần train. Cần ước lượng thời gian sau khi chạy notebook Kaggle để chia GPU.
 
