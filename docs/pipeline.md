@@ -41,13 +41,29 @@ cùng hàm metric → một schema CSV → một script tổng hợp. Chỉ ph�
 | 5. Tổng hợp | `scripts/summarize.py`, `configs/paper_results.csv` | Có, đã thử bằng dữ liệu giả. Số bài báo mới có AUROC của DAMR |
 | 6. Hình và bảng | — | Chưa có (Trung Hiếu) |
 
+## Quy ước seed
+
+| Mục | Quy ước |
+|---|---|
+| Seed chung (bảng so sánh, ablation) | **16, 17, 18** cho mọi phương pháp và dataset. 16 là seed tác giả dùng trong `DAMR/run/run_*.sh` |
+| DAMR (E2) | Chạy **16–25** cho đủ 10 lần như bài báo; bảng chính lấy 16, 17, 18 (`summarize.py --seeds 16 17 18`) |
+| Thí nghiệm phụ | E2 với seed 0, 1, 2 (chạy trước khi đổi quy ước): `results/E2_DAMR_seeds012.csv`, dùng để xem độ nhạy theo seed |
+| Seed điều khiển | `random`, `numpy`, `torch` (CPU + CUDA), đặt trước khi nạp dữ liệu; vị trí đoạn validation cũng do seed quyết định |
+| Tên | thư mục `<dataset>_seed_<k>`, cột CSV `seed` |
+
+Cùng seed vẫn lệch nhỏ giữa các lần chạy (code không bật `cudnn.deterministic`; đo được khoảng 0.02 điểm AUROC trên PSM).
+
 ## Quy ước metric
 
 - Theo **cửa sổ**, không dùng point adjustment. AUROC và AUPRC là chính.
-- F1 và `flagged_rate` dùng ngưỡng = **phân vị 99% của điểm validation** (validation chỉ có dữ liệu bình
-  thường). Không dùng tập test để chọn ngưỡng.
+- F1 và `flagged_rate` dùng ngưỡng = **phân vị 99% (P99) của điểm validation** (validation chỉ có dữ liệu bình
+  thường), tính riêng cho từng mô hình. Không dùng tập test để chọn ngưỡng. **Nhóm đã chốt P99 (26/11/2026).**
+  Không dùng ngưỡng cố định (0.5, 0.8…): mỗi mô hình có thang điểm khác nhau (điểm DAMR là khoảng cách kNN, cỡ 0.01).
+  Với DAMR, P99 cho F1 rất thấp trên PSM (điểm test thấp hơn điểm đoạn validation nên ngưỡng nằm quá cao);
+  báo cáo cần giải thích điều này.
 - `summarize.py` báo cáo hai cách chọn epoch: `best_test` (như code gốc, nhìn tập test) và `last` (epoch cuối).
-- Std là độ lệch chuẩn mẫu (ddof = 1) trên 3 seed. Metric nhân 100.
+  **Bảng so sánh chính dùng `last` cho mọi mô hình**; `best_test` của DAMR đưa vào bảng phụ.
+- Std là độ lệch chuẩn mẫu (ddof = 1) trên các seed. Metric nhân 100.
 
 ## Chạy cả đường cho DAMR
 

@@ -9,7 +9,7 @@ Mỗi phương pháp một thư mục con `baselines/<Tên>/`. Bắt đầu bằ
 | Dữ liệu, chuẩn hóa, cửa sổ 60 / bước 10, nhãn cửa sổ | `common.data.load_split` | tự đọc file hoặc tự chuẩn hóa |
 | Validation 20% (cùng vị trí với DAMR theo seed) | `sp.val` | dùng tập test để chọn epoch hay siêu tham số |
 | Metric, ngưỡng F1, lưu điểm, ghi CSV | `common.results.record_epoch` | tự tính AUROC/F1 |
-| Seed | 0, 1, 2 | |
+| Seed | 16, 17, 18 | đổi seed, hoặc chọn epoch/ngưỡng bằng tập test |
 
 Mô hình, loss, optimizer, số epoch và siêu tham số giữ đúng **mặc định của repo gốc** baseline. Nếu repo gốc có
 bước đặc thù (ví dụ point adjustment, ngưỡng riêng), bỏ bước đó và chỉ giữ điểm bất thường thô.

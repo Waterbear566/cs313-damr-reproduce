@@ -2,6 +2,7 @@
 
 Cách dùng (từ gốc repo):
     python scripts/summarize.py results/E2_DAMR.csv [results/E3_*.csv ...] --out results/summary.csv
+    python scripts/summarize.py results/E2_DAMR.csv --seeds 16 17 18      # chỉ lấy các seed này
 
 Mỗi lần chạy (model, variant, dataset, noise, seed) được rút gọn thành HAI dòng:
   best_test  epoch có AUROC test cao nhất, đúng cách code gốc DAMR chọn checkpoint (epoch ĐẦU TIÊN đạt max)
@@ -117,12 +118,18 @@ def main():
     ap.add_argument("csv", nargs="*", help="CSV kết quả; bỏ trống = mọi results/E*.csv")
     ap.add_argument("--paper", default=os.path.join(ROOT, "configs", "paper_results.csv"))
     ap.add_argument("--out", default=os.path.join(ROOT, "results", "summary.csv"))
+    ap.add_argument("--seeds", nargs="+", help="chỉ tính các seed này, vd. --seeds 16 17 18 (mặc định: mọi seed)")
     args = ap.parse_args()
 
     paths = args.csv or sorted(glob.glob(os.path.join(ROOT, "results", "E*.csv")))
     if not paths:
         raise SystemExit("Không có file kết quả nào trong results/")
-    picked, warnings = pick_epochs(read_rows(paths))
+    rows = read_rows(paths)
+    if args.seeds:
+        rows = [r for r in rows if r["seed"] in set(args.seeds)]
+        if not rows:
+            raise SystemExit(f"Không có dòng nào với seed {args.seeds}")
+    picked, warnings = pick_epochs(rows)
     table = summarize(picked, read_paper(args.paper))
     for w in warnings:
         print("CẢNH BÁO:", w)

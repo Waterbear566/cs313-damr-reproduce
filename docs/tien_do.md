@@ -1,0 +1,99 @@
+# Tiến độ và công việc – phần code (Nhóm 5)
+
+Cập nhật: 23/11/2026. File này dành cho những người làm code trong repo. Ai xong việc hoặc đổi trạng thái thì sửa file này trong PR của mình.
+
+Ký hiệu: ✅ xong · 🟡 đang làm · ⬜ chưa bắt đầu · ⏸ đang chờ việc khác
+
+---
+
+## Tóm tắt
+
+- **Đã xong:** dựng repo, README, quy ước kết quả, code ghi log cho E2, script chạy E2, notebook Kaggle, script kiểm tra dữ liệu, danh sách 11 điểm khác biệt giữa code và bài báo.
+- **Chưa có:** số liệu nào trong `results/`. Chưa chạy thật thí nghiệm nào. Chưa có code baseline.
+- **Việc gấp nhất:** merge nhánh `e2-damr-logging`, tải dữ liệu PSM/MSL/SMD, chạy thử notebook Kaggle để biết mỗi lần train mất bao lâu.
+
+---
+
+## Trạng thái theo thí nghiệm
+
+| Mã | Thí nghiệm | Người làm | Số lần train | Trạng thái | Ghi chú |
+|---|---|---|---|---|---|
+| E1 | Thống kê dataset (Bảng 1) | Hoàng Khang | 0 | 🟡 | Đã có `scripts/check_data.py`, cần dữ liệu để chạy |
+| E2 | DAMR gốc, 3 dataset × 3 seed | Mạnh Hùng, Huy Khang | 9 | 🟡 | Code xong, chưa chạy |
+| E3a | DeepSVDD, ALOCC, USAD, GANF, MTGFlow | Hoàng Khang | 45 | ⬜ | |
+| E3b | Anomaly Transformer, DCdetector, TFMAE, MtsCID | Minh Hoàng | 36 | ⬜ | |
+| E4 | Ablation (5 biến thể) | Mạnh Hùng, Huy Khang | 45 | ⬜ | Thiếu cờ cho MSASB(G), MSASB(L), τ cố định |
+| E5 | Nhiễu Gaussian trên PSM | Huy Khang | 0 | ⏸ | Chờ checkpoint E2, E3, E4 |
+| E6 | t-SNE trên MSL, độ tương đồng giữa các head | Huy Khang | 0 | ⏸ | Chờ checkpoint E2 |
+
+Tổng cộng khoảng 135 lần train. Cần ước lượng thời gian sau khi chạy notebook Kaggle để chia GPU.
+
+---
+
+## Việc của từng người
+
+### Vũ Cao Mạnh Hùng – quản lý repo, E2, E4
+- [x] Dựng repo, README, `.gitignore`, `requirements.txt`
+- [x] Thêm cờ ghi log (`--log_extra`, `--save_dir`, `--variant`, `--results_csv`), `common/results.py`, `scripts/run_e2.sh`
+- [x] Notebook `notebooks/stage1_kaggle_smoke.ipynb`
+- [ ] Merge `e2-damr-logging` và `docs-doi-vai-tro` vào `main`
+- [ ] Chạy E2 trên PSM, MSL, SMD (seed 0, 1, 2)
+- [ ] Thêm cờ cho MSASB(G), MSASB(L), τ = 0.25 cố định, rồi chạy E4
+- [ ] Review PR của Hoàng Khang và Huy Khang
+
+### Ngô Hoàng Khang – E1, E3a, hàm metric chung, demo
+- [ ] Chạy `python scripts/check_data.py --root DAMR/data` và xuất Bảng 1 vào `results/`
+- [x] Hàm metric chung (`common/metrics.py`) và dữ liệu chung cho baseline (`common/data.py`): đã có, cần review
+- [ ] Đưa 5 baseline nhóm A vào `baselines/<tên>/` theo `baselines/README.md` và mẫu `baselines/_template/`
+- [ ] Chuẩn bị demo
+- [ ] Review PR của Mạnh Hùng và Minh Hoàng
+
+### Lê Minh Hoàng – E3b
+- [ ] Đưa 4 baseline nhóm B vào `baselines/<tên>/` theo `baselines/README.md` và mẫu `baselines/_template/`
+- [ ] Ghi môi trường riêng (nếu có) vào `baselines/<tên>/README.md`
+
+### Võ Huy Khang – chạy cùng E2/E4, E5, E6, đối chiếu số liệu
+- [ ] Chạy cùng E2 và E4 để chia tải GPU
+- [ ] Viết script E5: thêm nhiễu Gaussian vào test PSM, chấm bằng checkpoint có sẵn
+- [ ] Viết script E6: t-SNE trên MSL, độ tương đồng giữa các head trên PSM
+- [ ] Đối chiếu số của nhóm với số bài báo; chỗ lệch quá độ lệch chuẩn thì ghi nguyên nhân vào `docs/`
+
+### Nguyễn Trung Hiếu – script vẽ hình và bảng
+- [ ] Viết script vẽ hình/bảng (PDF hoặc SVG) vào `figures/`, đọc từ `results/summary.csv` do `scripts/summarize.py` sinh ra
+- [ ] Bảng đặt số của nhóm cạnh số bài báo, ghi mean ± std trên 3 seed
+- [ ] Có thể làm trước bằng CSV giả theo đúng các cột quy ước
+
+---
+
+## Phát hiện cần nắm khi code
+
+Chi tiết ở [`code_vs_paper.md`](code_vs_paper.md). Những điểm ảnh hưởng tới cách chạy và cách đọc kết quả:
+
+1. Code chọn checkpoint theo **AUROC trên tập test**. Vì vậy nhóm báo cáo cả epoch code gốc chọn và epoch cuối.
+2. Tham số của adaptive temperature **không được đưa vào optimizer**, nên τ không thật sự được học. Khi viết phần E4, không được nói "τ học được so với τ cố định".
+3. Bước chấm kNN lấy ngẫu nhiên 10% đặc trưng, nên chấm lại cùng một checkpoint sẽ ra điểm hơi khác. E5 và E6 so sánh với điểm đã lưu trong `scores/`.
+4. Hàm `permutation` thay mọi sensor bằng sensor 0. MSASB làm FFT theo trục sensor. Cần đối chiếu với mục Method của bài báo trước khi kết luận.
+
+---
+
+## Thứ tự làm và phụ thuộc
+
+```
+Dữ liệu PSM/MSL/SMD ──► E1
+        │
+        ├──► Notebook Kaggle (ước lượng thời gian) ──► E2 ──► E5, E6
+        │                                          └──► E4 ──► E5
+        └──► Hàm metric chung ──► E3a, E3b ──► E5
+                                              
+results/*.csv ──► Script vẽ hình/bảng ──► (giao cho nhóm báo cáo)
+```
+
+---
+
+## Việc chung còn treo
+
+- [ ] Điền cột "Bài báo nói gì" trong `code_vs_paper.md` (đang ghi `<cần đối chiếu>`) sau khi nhóm báo cáo đọc bài báo
+- [ ] Xin quyền dữ liệu SWaT, WADI từ iTrust (làm nếu được cấp kịp)
+- [ ] Điền phiên bản CUDA và GPU vào README
+- [ ] Tạo thư mục Google Drive chung để lưu checkpoint, điền link vào README
+- [ ] Chốt deadline cho từng giai đoạn: `<điền>`
