@@ -34,7 +34,7 @@ cùng hàm metric → một schema CSV → một script tổng hợp. Chỉ ph�
 | 2. Tiền xử lý cho DAMR | `DAMR/data_loader.py` (code gốc) | Có |
 | 2. Tiền xử lý cho baseline | `common/data.py` | Có. Đã kiểm tra vị trí validation trùng code gốc với seed 0, 1, 2, 16 |
 | 3. Chạy DAMR (E2) | `scripts/run_e2.sh`, `notebooks/stage1_kaggle_smoke.ipynb` | Có, chưa chạy thật |
-| 3. Biến thể ablation (E4) | `DAMR/model.py`, `DAMR/main.py` | Thiếu cờ cho MSASB(G), MSASB(L), τ cố định |
+| 3. Biến thể ablation (E4) | `scripts/run_e4.sh`, cờ `--global_filter`, `--fixed_temp` | Có cờ cho đủ 5 biến thể; cách hiểu MSASB(G)/(L) và τ của biến thể cuối cần đối chiếu bài báo |
 | 3. Baseline (E3a, E3b) | `baselines/_template/run.py`, `baselines/README.md` | Có mẫu, chưa có baseline nào |
 | 3. Nhiễu (E5), t-SNE (E6) | — | Chưa có |
 | 4. Metric và ghi kết quả | `common/metrics.py`, `common/results.py` | Có, đã thử bằng dữ liệu giả |

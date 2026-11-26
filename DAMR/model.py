@@ -17,8 +17,11 @@ from torchmetrics.classification import MulticlassF1Score
 import torch.nn.functional as F
 
 class Multi_Scale_Spectral_Block(nn.Module):
-    def __init__(self, dim, badaptive_filter):
+    def __init__(self, dim, badaptive_filter, global_filter=True):
         super().__init__()
+        # [Nhóm 5] E4: global_filter=False bỏ nhánh lọc toàn cục (complex_weights nhân mọi tần số).
+        # Tham số vẫn được tạo như code gốc để thứ tự khởi tạo ngẫu nhiên không đổi.
+        self.global_filter = global_filter
         self.num_heads = 6
         self.dim_head = dim // self.num_heads
 
@@ -80,7 +83,10 @@ class Multi_Scale_Spectral_Block(nn.Module):
         weight_flat = target_weight.view(B * H, D)
         weight_final = weight_flat.unsqueeze(1).repeat(1, x_fft.shape[1], 1)
 
-        x_weighted = x_fft * weight_final
+        if self.global_filter:
+            x_weighted = x_fft * weight_final
+        else:  # [Nhóm 5] E4: w/o nhánh toàn cục
+            x_weighted = torch.zeros_like(x_fft)
 
         if self.badaptive_filter:
 
@@ -108,10 +114,10 @@ class Multi_Scale_Spectral_Block(nn.Module):
         return x_out
 
 class MSASB_layer(L.LightningModule):
-    def __init__(self, MSASB, adaptive_filter, dim, drop=0., drop_path=0., norm_layer=nn.LayerNorm):
+    def __init__(self, MSASB, adaptive_filter, dim, drop=0., drop_path=0., norm_layer=nn.LayerNorm, global_filter=True):
         super().__init__()
         self.norm1 = norm_layer(dim)
-        self.maasb = Multi_Scale_Spectral_Block(dim, adaptive_filter)
+        self.maasb = Multi_Scale_Spectral_Block(dim, adaptive_filter, global_filter)
         self.drop_path = DropPath(drop_path) if drop_path > 0. else nn.Identity()
         self.norm2 = norm_layer(dim)
         self.MSASB = MSASB
@@ -123,13 +129,13 @@ class MSASB_layer(L.LightningModule):
 
 class DAMR(L.LightningModule):
     def __init__(self, seq_len, hidden_dim, dropout_rate, depth, n_sensor,
-                 out_channels, num_heads, MSASB, adaptive_filter, input_channels, conv_hidden):
+                 out_channels, num_heads, MSASB, adaptive_filter, input_channels, conv_hidden, global_filter=True):
         super().__init__()
 
         dpr = [x.item() for x in torch.linspace(0, dropout_rate, depth)]  # stochastic depth decay rule
 
         self.msasb_blocks = nn.ModuleList([
-            MSASB_layer(MSASB, adaptive_filter, dim=seq_len, drop=dropout_rate, drop_path=dpr[i])
+            MSASB_layer(MSASB, adaptive_filter, dim=seq_len, drop=dropout_rate, drop_path=dpr[i], global_filter=global_filter)
             for i in range(depth)]
         )
 
