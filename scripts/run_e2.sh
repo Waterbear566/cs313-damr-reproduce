@@ -6,7 +6,7 @@ set -euo pipefail
 DATASET=${1:?Cần tên dataset: PSM | MSL | SMD}
 GPU=${2:-0}
 EPOCHS=${3:-}
-SEEDS=${SEEDS:-"0 1 2"}
+SEEDS=${SEEDS:-"16 17 18"}   # seed chung; 10 seed: SEEDS="16 17 18 19 20 21 22 23 24 25"
 
 case $DATASET in        # learning rate tác giả dùng trong DAMR/run/run_*.sh
   PSM) LR=1e-4 ;;

@@ -126,13 +126,13 @@ Lưu ý: script gốc chạy nền và đẩy toàn bộ output vào `/dev/null`
 
 ```bash
 cd DAMR
-python3 main.py --dataset=PSM --data_path=./data/psm --seed=0 --device=cuda:0 --lr=1e-4 \
-  2>&1 | tee ../logs/E2_PSM_seed0.log
+python3 main.py --dataset=PSM --data_path=./data/psm --seed=16 --device=cuda:0 --lr=1e-4 \
+  2>&1 | tee ../logs/E2_PSM_seed16.log
 ```
 
 Learning rate tác giả dùng cho từng dataset: PSM `1e-4`, MSL `5e-4`, SMD `1e-6`, SWaT `5e-5`, WADI `1e-4`. Về ablation (E4), `main.py` có sẵn cờ `--MSASB`, `--adaptive_filter` và `--num_heads`. Các biến thể w/o MSASB(G), w/o MSASB(L) và τ cố định chưa có cờ riêng, nên cần xem `model.py` để thêm.
 
-**Chạy E2 bằng script của nhóm** (3 seed 0, 1, 2, learning rate theo tác giả, có ghi log mở rộng):
+**Chạy E2 bằng script của nhóm** (seed 16, 17, 18, learning rate theo tác giả, có ghi log mở rộng; `SEEDS="16 17 ... 25" bash scripts/run_e2.sh ...` để chạy 10 seed):
 
 ```bash
 bash scripts/run_e2.sh PSM 0        # đối số: dataset, ID GPU, [số epoch, mặc định 40]
@@ -149,11 +149,11 @@ Script bật các cờ nhóm thêm vào `main.py` (mặc định đều tắt, n
 
 Kết quả: `results/E2_DAMR.csv`, log ở `logs/E2_<dataset>_seed<k>.log`, checkpoint ở `checkpoints/E2/<dataset>_seed_<k>/saved_models/` (`model.pt` = epoch tốt nhất theo test như code gốc, `model_last.pt` = epoch cuối).
 
-**Trên Kaggle:** mở `notebooks/stage1_kaggle_smoke.ipynb`, chọn GPU T4 và bật Internet. Notebook cài thư viện, tự tìm dữ liệu trong `/kaggle/input`, kiểm tra định dạng (`scripts/check_data.py`), chạy PSM 1 epoch và ước lượng tổng thời gian.
+**Trên Kaggle:** mở `notebooks/stage1_kaggle_smoke.ipynb`, chọn GPU T4 và bật Internet. Notebook cài thư viện, tự tìm dữ liệu trong `/kaggle/input`, kiểm tra định dạng (`scripts/check_data.py`), chạy PSM 1 epoch và ước lượng tổng thời gian. Chạy E2 thật bằng `notebooks/e2_kaggle_run.ipynb` ở chế độ **Save & Run All (Commit)**; kết quả nằm trong `e2_outputs.zip` ở tab Output.
 
 **Kiểm tra dữ liệu:** `python scripts/check_data.py --root DAMR/data` kiểm tra tên file, số chiều, nhãn, và in thống kê kiểu Bảng 1.
 
-Seed dùng chung cho mọi phương pháp: `0, 1, 2`. Seed mặc định của tác giả là 16.
+Seed dùng chung cho mọi phương pháp: `16, 17, 18` (bắt đầu từ seed 16 mà tác giả dùng trong `DAMR/run/run_*.sh`). DAMR chạy thêm 16–25 cho đủ 10 lần như bài báo. Kết quả seed 0, 1, 2 chạy trước đó giữ lại làm thí nghiệm phụ về độ nhạy theo seed. Chi tiết ở `docs/pipeline.md`.
 
 ---
 
@@ -170,14 +170,16 @@ model,variant,dataset,seed,noise,epoch,auroc,auprc,f1,flagged_rate,runtime_s
 | `model` | Tên phương pháp, ví dụ `DAMR`, `MTGFlow` |
 | `variant` | `full` hoặc tên biến thể ablation |
 | `dataset` | `PSM`, `MSL`, `SMD`, … |
-| `seed` | 0, 1, 2 |
+| `seed` | 16, 17, 18 (DAMR thêm 19–25) |
 | `noise` | Độ lệch chuẩn nhiễu thêm vào test, `0` nếu không có |
 | `epoch` | Epoch được đánh giá |
 | `auroc`, `auprc`, `f1` | Metric tính bằng hàm chung trong `common/` |
 | `flagged_rate` | Tỉ lệ cửa sổ bị gán bất thường |
 | `runtime_s` | Thời gian chạy (giây) |
 
-**Thước đo:** AUROC theo cửa sổ (như bài báo) và AUPRC là chính, F1 là phụ. Báo cáo mean ± std trên 3 seed.
+**Thước đo:** AUROC theo cửa sổ (như bài báo) và AUPRC là chính, F1 là phụ (ngưỡng = phân vị 99% điểm validation). Báo cáo mean ± std trên 3 seed.
+
+Toàn bộ đường đi từ dữ liệu tới bảng tổng hợp, và khâu nào đã có, xem [`docs/pipeline.md`](docs/pipeline.md). Tổng hợp: `python scripts/summarize.py`.
 
 **Quy tắc:**
 - Mọi bảng và hình được sinh bằng script từ `results/`, xuất PDF hoặc SVG. **Không nhập số bằng tay.**
@@ -189,7 +191,7 @@ model,variant,dataset,seed,noise,epoch,auroc,auprc,f1,flagged_rate,runtime_s
 
 1. Cùng dữ liệu, cùng chuẩn hóa, cùng cửa sổ, cùng nhãn và cùng hàm metric cho mọi phương pháp.
 2. Giữ siêu tham số mặc định của từng repo, cố định số epoch, **không tinh chỉnh dựa trên tập test**.
-3. Mọi phương pháp, kể cả DAMR, chạy 3 seed (bài báo chạy 10 lần).
+3. Mọi phương pháp, kể cả DAMR, chạy cùng 3 seed 16, 17, 18 (bài báo chạy 10 lần; DAMR chạy thêm đến seed 25).
 4. Bảng kết quả đặt số của nhóm cạnh số bài báo. Chỗ nào lệch hơn độ lệch chuẩn bài báo báo cáo thì ghi nguyên nhân có thể vào `docs/`.
 
 ---

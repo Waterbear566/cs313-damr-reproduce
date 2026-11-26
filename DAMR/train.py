@@ -29,8 +29,12 @@ def trainer(model, adaptive_temp, train_loader, val_loader, test_loader, n_senso
     best_epoch = 0  # [Nhóm 5]
     log_extra = getattr(args, 'log_extra', False)  # [Nhóm 5]
     if log_extra:
-        scores_dir = os.path.join(experiment_log_dir, "scores")
-        os.makedirs(scores_dir, exist_ok=True)
+        from common.results import record_epoch
+        # [Nhóm 5] Loader validation không xáo trộn, chỉ để chấm điểm đặt ngưỡng F1.
+        # generator riêng: tạo iterator DataLoader rút một số từ RNG của torch; dùng generator mặc định
+        # sẽ làm lệch thứ tự xáo trộn tập train so với code gốc.
+        val_eval_loader = torch.utils.data.DataLoader(val_loader.dataset, batch_size=args.batch_size,
+                                                      shuffle=False, generator=torch.Generator())
     logger.debug("Training started ...")
     start_time = time.time()
 
@@ -41,12 +45,9 @@ def trainer(model, adaptive_temp, train_loader, val_loader, test_loader, n_senso
         logger.debug('Epoch: {}/{}, Loss: {}'.format(epoch + 1, args.epochs, train_loss))
         # val_auc, _ = model_evaluate(model, A, train_loader, val_loader, device)
         # logger.debug('Epoch: {}/{}, valid AUROC is: {}'.format(epoch + 1, args.epochs, val_auc))
-        if log_extra:  # [Nhóm 5] giữ lại điểm bất thường của từng epoch
-            test_auc, _, test_scores, test_labels = model_evaluate(model, args, A, train_loader, test_loader, device, return_scores=True)
-            test_auprc = average_precision_score(test_labels, test_scores)
-            np.save(os.path.join(scores_dir, f"epoch_{epoch + 1:03d}.npy"), test_scores.astype(np.float32))
-            if epoch == 0:
-                np.save(os.path.join(scores_dir, "labels.npy"), test_labels.astype(np.int8))
+        if log_extra:  # [Nhóm 5] giữ lại điểm test và validation của từng epoch (cùng ngân hàng kNN)
+            test_auc, _, test_scores, test_labels, val_scores = model_evaluate(
+                model, args, A, train_loader, test_loader, device, return_scores=True, extra_loader=val_eval_loader)
         else:
             test_auc, _ = model_evaluate(model, args, A, train_loader, test_loader, device)
         logger.debug('Epoch: {}/{}, test AUROC is: {}'.format(epoch + 1, args.epochs, test_auc))
@@ -68,16 +69,17 @@ def trainer(model, adaptive_temp, train_loader, val_loader, test_loader, n_senso
         logger.debug('Epoch: {}/{}, Time: {:.3f}'
                     .format(epoch + 1, args.epochs, epoch_train_time))
 
-        if log_extra:  # [Nhóm 5] checkpoint epoch cuối (ghi đè mỗi epoch) và dòng CSV chung
+        if log_extra:  # [Nhóm 5] checkpoint epoch cuối (ghi đè mỗi epoch), lưu điểm và dòng CSV chung
             os.makedirs(os.path.join(experiment_log_dir, "saved_models"), exist_ok=True)
             last = {'model_state_dict': model.state_dict()}
             last.update(_extra_state(epoch + 1, test_auc, adaptive_temp, A, args))
             torch.save(last, os.path.join(experiment_log_dir, "saved_models", 'model_last.pt'))
-            if getattr(args, 'results_csv', ''):
-                from common.results import append_result
-                append_result(args.results_csv, model='DAMR', variant=args.variant, dataset=args.dataset,
-                              seed=args.seed, noise=0, epoch=epoch + 1, auroc=f"{test_auc:.6f}",
-                              auprc=f"{test_auprc:.6f}", runtime_s=f"{epoch_train_time:.3f}")
+            m = record_epoch(experiment_log_dir, getattr(args, 'results_csv', ''), model='DAMR',
+                             variant=args.variant, dataset=args.dataset, seed=args.seed, epoch=epoch + 1,
+                             test_scores=test_scores, test_labels=test_labels, val_scores=val_scores,
+                             runtime_s=epoch_train_time)
+            logger.debug('Epoch: {}/{}, test AUPRC: {:.4f}, F1 (ngưỡng từ val): {:.4f}, flagged: {:.4f}'
+                         .format(epoch + 1, args.epochs, m['auprc'], m['f1'], m['flagged_rate']))
 
         logger.debug('======================================================')
 
@@ -138,7 +140,7 @@ def model_train(model, adaptive_temp, A, optimizer, train_loader, device, num_he
     return total_loss / (total_num)
 
 
-def model_evaluate(model, args, A, train_loader, test_loader, device, return_scores=False):
+def model_evaluate(model, args, A, train_loader, test_loader, device, return_scores=False, extra_loader=None):
 
     # Build a normal feature bank for KNN scoring.
     train_feature_space = []
@@ -180,7 +182,16 @@ def model_evaluate(model, args, A, train_loader, test_loader, device, return_sco
     auc = roc_auc_score(test_labels, distances)
 
     if return_scores:  # [Nhóm 5] mặc định vẫn trả về như code gốc
-        return auc, train_feature_space, distances, test_labels
+        if extra_loader is None:
+            return auc, train_feature_space, distances, test_labels
+        # Chấm thêm extra_loader (validation) bằng CÙNG ngân hàng kNN ở trên: không gọi thêm
+        # np.random nên chuỗi số ngẫu nhiên của huấn luyện không đổi.
+        extra_features = []
+        with torch.no_grad():
+            for (data, _) in extra_loader:
+                extra_features.append(get_features(model(data.to(device), A)))
+        extra_features = torch.cat(extra_features, dim=0).contiguous().cpu().numpy()
+        return auc, train_feature_space, distances, test_labels, utils.knn_score(train_feature_space, extra_features)
     return auc, train_feature_space
 
 
