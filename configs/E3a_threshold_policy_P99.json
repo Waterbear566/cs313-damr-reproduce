@@ -5,10 +5,10 @@
   "comparison": "score > threshold",
   "calibration": "All saved final validation scores, without filtering label==-1 or label==0.",
   "evaluation": "Binary window labels; sklearn F1/precision/recall zero_division=0; no point adjustment.",
-  "selection": "Exact old inventory for36 non-SVDD runs + exact uploaded ZIP inventory for9 upstream_eval_bn runs. No best-test selection.",
+  "selection": "Exact old inventory for 36 non-SVDD runs + exact uploaded ZIP inventory for 9 upstream_eval_bn runs. No best-test selection.",
   "timing": "P99 postprocessing decided after observing AUROC/AP; not preregistered. No test-F1 sweep performed by this script.",
-  "limitations": "Validation windows overlap and scaler fit uses full train. Normality not independently proven; P99 does not guarantee1% test alerts/FPR.",
-  "runtime": "Original runtime_s preserved; postprocessing separate. New SVDD includes20 test passes unlike old final-only runners; hardware also differs. Do not infer pure training speed from runtime comparison.",
+  "limitations": "Validation windows overlap and scaler fit uses full train. Normality not independently proven; P99 does not guarantee 1% test alerts/FPR.",
+  "runtime": "Original runtime_s preserved; postprocessing separate. New SVDD includes 20 test passes unlike old final-only runners; hardware also differs. Do not infer pure training speed from runtime comparison.",
   "audit_scope": "Scores/identities/labels/configs/completion metadata/metrics/BN history. No independent checkpoint inference, no scaler pickle loading, no raw-data or checkpoint hash verification.",
   "inputs": {
     "old_results": {

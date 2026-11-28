@@ -1,6 +1,6 @@
 # Tiến độ và công việc – phần code (Nhóm 5)
 
-Cập nhật: 27/11/2026. File này dành cho những người làm code trong repo. Ai xong việc hoặc đổi trạng thái thì sửa file này trong PR của mình.
+Cập nhật: 28/11/2026. File này dành cho những người làm code trong repo. Ai xong việc hoặc đổi trạng thái thì sửa file này trong PR của mình.
 
 Ký hiệu: ✅ xong · 🟡 đang làm · ⬜ chưa bắt đầu · ⏸ đang chờ việc khác
 
@@ -9,8 +9,8 @@ Ký hiệu: ✅ xong · 🟡 đang làm · ⬜ chưa bắt đầu · ⏸ đang c
 ## Tóm tắt
 
 - **Đã xong:** dựng repo, README, quy ước kết quả, code ghi log cho E2, script chạy E2, notebook Kaggle, script kiểm tra dữ liệu, danh sách 11 điểm khác biệt giữa code và bài báo, E1 (thống kê dataset), E3a (45 lượt baseline nhóm A, đã tính F1/flagged rate P99).
-- **Chưa có:** E3b, E4, E5, E6; code Colab của baseline chưa được đưa vào `baselines/<tên>/`.
-- **Việc gấp nhất:** merge PR của Hoàng Khang (E1, E3a) ,merge nhánh `e2-damr-logging`, tải dữ liệu PSM/MSL/SMD, chạy thử notebook Kaggle để biết mỗi lần train mất bao lâu.
+- **Chưa có:** E3b, E4, E5, E6.
+- **Việc gấp nhất:** merge PR của Hoàng Khang (E1, E3a), chạy E4 trên Kaggle.
 
 ---
 
@@ -47,7 +47,7 @@ Tổng cộng khoảng 135 lần train. Cần ước lượng thời gian sau kh
 - [x] Thống kê dataset E1 (Bảng 1): đã có trong `results/E1_dataset_stats.csv` và `results/E1_missing_values_by_feature.csv`
 - [x] Hàm metric chung (`common/metrics.py`) và dữ liệu chung cho baseline (`common/data.py`): đã có, cần review
 - [x] Chạy 5 baseline nhóm A (DeepSVDD, ALOCC, USAD, GANF, MTGFlow) × 3 dataset × 3 seed (16/17/18): đã có trong `results/E3_*.csv`
-- [ ] Đưa code Colab của 5 baseline vào `baselines/<tên>/colab_E3a/` (chờ nhóm thống nhất vị trí)
+- [x] Đưa code Colab của 5 baseline vào `baselines/<tên>/colab_E3a/` và notebook vào `notebooks/`
 - [ ] Chuẩn bị demo
 - [ ] Review PR của Mạnh Hùng và người làm E3b
 

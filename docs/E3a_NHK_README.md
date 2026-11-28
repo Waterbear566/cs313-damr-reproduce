@@ -18,9 +18,8 @@ Bàn giao thống kê dữ liệu (E1) và kết quả 5 baseline nhóm A (E3a):
 | Review chéo và demo | Chưa hoàn tất |
 
 ## 2. File trong repo
-PR này cập nhật results/, thêm configs/, scripts/, docs/.
-Các đường dẫn notebooks/ và baselines/.../colab_E3a/ trong README
-là vị trí dự kiến, sẽ bổ sung sau khi nhóm thống nhất.
+
+PR này cập nhật `results/`, thêm `configs/`, `scripts/`, `docs/`, code Colab `baselines/<tên>/colab_E3a/` và notebook `notebooks/e3a_*.ipynb`.
 
 | File | Nội dung |
 |---|---|
@@ -42,6 +41,7 @@ Tổng hợp mean ± std: `python scripts/summarize.py results/E3_*.csv` (bảng
 Bảng chính chỉ lấy selection=last; riêng DeepSVDD chỉ lấy
 variant=upstream_eval_bn. Biến thể mtgflow_repo_cnn_no_pretrain
 chỉ để tham khảo, không cộng vào 45 lượt chính.
+
 ## 3. Code baseline
 
 | File | Phạm vi |
@@ -104,7 +104,15 @@ Mỗi lượt lấy **P99 validation score**, `np.quantile(..., 0.99, method="li
 - F1/flagged rate tính từ `validation_scores.csv` và `test_scores.csv` đã lưu trong từng lượt, bằng CPU, không train lại. Script đọc lại score và kiểm tra AUROC/AP khớp với số đã báo cáo trước khi tính (`results/E3a_score_audit.csv`).
 - MSL chỉ có 1165 window validation, nên P99 dựa vào khoảng 12 score cao nhất; ngưỡng MSL kém ổn định hơn PSM (2648) và SMD (14167).
 - Ngưỡng P95 trước đây chỉ là đề xuất, nay không dùng; file P95 giữ làm lịch sử.
+- Validation lấy từ file train, vốn không có nhãn bất thường. Window validation mang nhãn −1 (không có nhãn gốc), nên không có window nhãn 1 nào. Như mọi phương pháp, ngưỡng giả định dữ liệu train là bình thường.
 
 ## 8. Artifact lớn
 
 Checkpoint, scaler, split và score gốc nằm trên các thư mục Drive (`CS313_Nhom5/hoang_khang/E3a` ở tài khoản 1; `NHK_GANF_TAI_KHOAN_2/E3a` ở tài khoản 2; `NHK_DeepSVDD_UPSTREAM/E3a` ở tài khoản đã chạy notebook DeepSVDD). Link chia sẻ gửi riêng trong nhóm, không commit lên repo. Không commit raw data, checkpoint `.pt`, score lớn hay thông tin đăng nhập.
+
+## 9. Hạn chế đã biết
+
+- **PSM seed 17, ngưỡng P99 không ổn định.** MTGFlow, GANF, USAD và ALOCC chỉ đạt F1 1,8–2,8% và gắn cờ 0,3–0,4% window test, trong khi seed 16 và 18 đạt F1 khoảng 20–45% (trừ ALOCC). DeepSVDD không bị ảnh hưởng (F1 32%). Có thể khối validation 20% mà seed 17 chọn chứa vài window score cao, đẩy ngưỡng lên; chưa kiểm chứng. AUROC/AP không phụ thuộc ngưỡng nên không bị ảnh hưởng.
+- **ALOCC AUROC quanh 0,5** trên cả ba dataset (trung bình 49,2 / 50,7 / 51,0 cho PSM / MSL / SMD). Điểm −D(x) gần như không phân biệt được window bất thường, có thể vì discriminator bão hòa (D loss giảm về gần 0 ở cuối train). Đây là hạn chế đã biết, không tinh chỉnh thêm để tăng điểm test.
+- **DeepSVDD `upstream_eval_bn` trên MSL dưới 0,5** (44,1–49,5, trung bình 46,9), thấp hơn bản cũ (54,0) và paper (52,9). Bảng chính vẫn dùng `upstream_eval_bn` vì đúng hành vi code gốc; không chọn biến thể theo điểm test.
+- Chỉ có kết quả epoch cuối cho 36 lượt không phải DeepSVDD, nên không tính được `best_test` cho các model này.

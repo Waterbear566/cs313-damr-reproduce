@@ -143,7 +143,7 @@ def merge_nhk_p99(old_results_path, old_inventory_path, svdd_zip_path,
     with ZipFile(io.BytesIO(originals['svdd_zip'])) as z:
         _require(len(z.namelist()) == len(set(z.namelist())), 'ZIP chứa tên file trùng.')
         summaries = [n.rsplit('/', 1)[0] for n in z.namelist() if n.endswith('/results_9_LAST.csv')]
-        _require(len(summaries) == 1, 'ZIP phải có đúng một summary9; không tự chọn summary.')
+        _require(len(summaries) == 1, 'ZIP phải có đúng một summary 9 lượt; không tự chọn summary.')
         summary_name = summaries[0]
         new = _grid(_csv(z.read(summary_name + '/results_9_LAST.csv')), ['DeepSVDD'])
         new_inv = _grid(_csv(z.read(summary_name + '/run_inventory.csv')), ['DeepSVDD'])
@@ -211,7 +211,7 @@ def merge_nhk_p99(old_results_path, old_inventory_path, svdd_zip_path,
                                  and cfg.get('epochs') == expected['epoch'] == epoch, 'Sai fixed-last policy.')
                     if model == 'DeepSVDD':
                         _require(cfg.get('variant') == 'upstream_eval_bn', 'Thiếu variant SVDD mới.')
-                        _require(status.get('epoch') == 20 and status.get('checkpoint_reload_matches') is True, 'SVDD thiếu trạng thái reload/final20.')
+                        _require(status.get('epoch') == 20 and status.get('checkpoint_reload_matches') is True, 'SVDD thiếu trạng thái reload/final 20.')
                         _require(cfg.get('bn_policy') == 'epoch1_train_epoch2_20_eval_gradients_enabled', 'Sai BN policy.')
                         _require(cfg.get('batch_size') == 512 and cfg.get('lr') == 1e-4
                                  and cfg.get('weight_decay') == 5e-4 and cfg.get('pretraining_epochs') == 0,
@@ -285,7 +285,7 @@ def merge_nhk_p99(old_results_path, old_inventory_path, svdd_zip_path,
             aggregations[col + '_mean'] = (col, 'mean')
             aggregations[col + '_std'] = (col, 'std')  # pandas sample std ddof=1
         summary = result.groupby(['model', 'variant', 'dataset']).agg(**aggregations).reset_index()
-        _require(len(summary) == 15 and (summary.n_seeds == 3).all(), 'Summary không đủ15 nhóm x3 seed.')
+        _require(len(summary) == 15 and (summary.n_seeds == 3).all(), 'Summary không đủ 15 nhóm x 3 seed.')
         stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')
         out = Path(output_parent) / ('MERGED_45_LAST_P99_' + stamp)
         out.mkdir(parents=True, exist_ok=False)
@@ -305,10 +305,10 @@ def merge_nhk_p99(old_results_path, old_inventory_path, svdd_zip_path,
         'policy_id': POLICY_ID, 'q': .99, 'quantile_method': 'linear', 'comparison': 'score > threshold',
         'calibration': 'All saved final validation scores, without filtering label==-1 or label==0.',
         'evaluation': 'Binary window labels; sklearn F1/precision/recall zero_division=0; no point adjustment.',
-        'selection': 'Exact old inventory for36 non-SVDD runs + exact uploaded ZIP inventory for9 upstream_eval_bn runs. No best-test selection.',
+        'selection': 'Exact old inventory for 36 non-SVDD runs + exact uploaded ZIP inventory for 9 upstream_eval_bn runs. No best-test selection.',
         'timing': 'P99 postprocessing decided after observing AUROC/AP; not preregistered. No test-F1 sweep performed by this script.',
-        'limitations': 'Validation windows overlap and scaler fit uses full train. Normality not independently proven; P99 does not guarantee1% test alerts/FPR.',
-        'runtime': 'Original runtime_s preserved; postprocessing separate. New SVDD includes20 test passes unlike old final-only runners; hardware also differs. Do not infer pure training speed from runtime comparison.',
+        'limitations': 'Validation windows overlap and scaler fit uses full train. Normality not independently proven; P99 does not guarantee 1% test alerts/FPR.',
+        'runtime': 'Original runtime_s preserved; postprocessing separate. New SVDD includes 20 test passes unlike old final-only runners; hardware also differs. Do not infer pure training speed from runtime comparison.',
         'audit_scope': 'Scores/identities/labels/configs/completion metadata/metrics/BN history. No independent checkpoint inference, no scaler pickle loading, no raw-data or checkpoint hash verification.',
         'inputs': {name: {'path': str(path), 'sha256': _sha(originals[name])}
                    for name, path in [('old_results', old_results_path), ('old_inventory', old_inventory_path), ('svdd_zip', svdd_zip_path)]},
@@ -319,13 +319,13 @@ def merge_nhk_p99(old_results_path, old_inventory_path, svdd_zip_path,
     (out / 'threshold_policy.json').write_text(json.dumps(policy, ensure_ascii=False, indent=2), encoding='utf-8')
     (out / 'README.md').write_text(
         '# 45 baseline runs: last + validation P99\n\n'
-        '36 non-SVDD original runs +9 DeepSVDD upstream_eval_bn. Original45 and all run artifacts unchanged.\n\n'
-        'F1/precision/recall are window-level, NOT point-adjusted. Threshold is validation P99 linear, test score strictly greater. All metric/rate values in[0,1]. Summary std uses ddof=1 across3 seeds.\n\n'
+        '36 non-SVDD original runs + 9 DeepSVDD upstream_eval_bn. Original 45 and all run artifacts unchanged.\n\n'
+        'F1/precision/recall are window-level, NOT point-adjusted. Threshold is validation P99 linear, test score strictly greater. All metric/rate values in [0,1]. Summary std uses ddof=1 across 3 seeds.\n\n'
         'See threshold_policy.json for post-hoc policy disclosure, audit limits and timing. Runtime_s is preserved, NOT harmonized across hardware/evaluation schedules.\n\n'
-        'The report contains CSV/provenance, NOT the45 model checkpoints. Preserve/share all source Drive folders and the SVDD ZIP.\n', encoding='utf-8')
+        'The report contains CSV/provenance, NOT the 45 model checkpoints. Preserve/share all source Drive folders and the SVDD ZIP.\n', encoding='utf-8')
     checksums = {p.name: _sha(p.read_bytes()) for p in out.iterdir() if p.is_file()}
     (out / 'report_checksums.json').write_text(json.dumps(checksums, indent=2), encoding='utf-8')
-    print('\nĐỦ45 LƯỢT. Không sửa file gốc. Output:', out)
+    print('\nĐỦ 45 LƯỢT. Không sửa file gốc. Output:', out)
     print(summary.to_string(index=False))
     return out, result, summary
 
