@@ -34,8 +34,8 @@ cùng hàm metric → một schema CSV → một script tổng hợp. Chỉ ph�
 | 2. Tiền xử lý cho DAMR | `DAMR/data_loader.py` (code gốc) | Có |
 | 2. Tiền xử lý cho baseline | `common/data.py` | Có. Đã kiểm tra vị trí validation trùng code gốc với seed 0, 1, 2, 16 |
 | 3. Chạy DAMR (E2) | `scripts/run_e2.sh`, `notebooks/e2_kaggle_run.ipynb` | Xong: seed 16–25 (`results/E2_DAMR.csv`) và seed 0, 1, 2 (thí nghiệm phụ) |
-| 3. Biến thể ablation (E4) | `scripts/run_e4.sh`, cờ `--global_filter`, `--fixed_temp` | Có cờ cho đủ 5 biến thể, đã đối chiếu bài báo (mục 12 `code_vs_paper.md`); chưa chạy |
-| 3. Baseline (E3a, E3b) | `baselines/_template/run.py`, `baselines/README.md` | Có mẫu, chưa có baseline nào |
+| 3. Biến thể ablation (E4) | `scripts/run_e4.sh`, cờ `--global_filter`, `--fixed_temp` | Xong: 5 biến thể × seed 16–18 (`results/E4_DAMR_ablation.csv`, `E4_summary.csv`), nhận xét ở `docs/E4_ket_qua.md` |
+| 3. Baseline (E3a, E3b) | `baselines/_template/run.py`, `baselines/README.md` | E3a: có số liệu 5 baseline (`results/E3_<Model>.csv`), code mới có ALOCC, DeepSVDD. E3b: chưa có |
 | 3. Nhiễu (E5), t-SNE (E6) | — | Chưa có |
 | 4. Metric và ghi kết quả | `common/metrics.py`, `common/results.py` | Có, dùng thật trong E2 |
 | 5. Tổng hợp | `scripts/summarize.py` (`--seeds`), `configs/paper_results.csv` | Có, dùng thật trong E2. `paper_results.csv` có đủ Bảng 2, 3, 4, 7 (đã đối chiếu PDF) |
