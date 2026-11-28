@@ -1,0 +1,30 @@
+{
+  "policy_id": "validation_p99_linear_strict_gt_window_v1",
+  "q": 0.99,
+  "quantile_method": "linear",
+  "comparison": "score > threshold",
+  "calibration": "All saved final validation scores, without filtering label==-1 or label==0.",
+  "evaluation": "Binary window labels; sklearn F1/precision/recall zero_division=0; no point adjustment.",
+  "selection": "Exact old inventory for 36 non-SVDD runs + exact uploaded ZIP inventory for 9 upstream_eval_bn runs. No best-test selection.",
+  "timing": "P99 postprocessing decided after observing AUROC/AP; not preregistered. No test-F1 sweep performed by this script.",
+  "limitations": "Validation windows overlap and scaler fit uses full train. Normality not independently proven; P99 does not guarantee 1% test alerts/FPR.",
+  "runtime": "Original runtime_s preserved; postprocessing separate. New SVDD includes 20 test passes unlike old final-only runners; hardware also differs. Do not infer pure training speed from runtime comparison.",
+  "audit_scope": "Scores/identities/labels/configs/completion metadata/metrics/BN history. No independent checkpoint inference, no scaler pickle loading, no raw-data or checkpoint hash verification.",
+  "inputs": {
+    "old_results": {
+      "path": "/content/results_45_runs.csv",
+      "sha256": "0b09e4beb3e23f1fcb32b846c255a0bf9f3aed61a7b9d27ec1a9f3100ef99277"
+    },
+    "old_inventory": {
+      "path": "/content/run_inventory.csv",
+      "sha256": "f3e4b764f26ed5eecae1dbae7bf3ae5973d277f9a8dc0d70e8a2384ecd545783"
+    },
+    "svdd_zip": {
+      "path": "/content/DeepSVDD_9_RUNS_20261126T164346Z.zip",
+      "sha256": "95882486b0bf0b5295e89fae91dfa94e05ea61883050888216f502e3cc5b9c94"
+    }
+  },
+  "path_map": {},
+  "postprocess_runtime_s": 77.84723765999979,
+  "created_utc": "2026-11-26T16:55:57.059786+00:00"
+}

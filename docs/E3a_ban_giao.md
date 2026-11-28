@@ -1,5 +1,7 @@
 # E3a và E1: kết quả bàn giao của Hoàng Khang
 
+> **Tài liệu này đã cũ (bản 23/11/2026).** Bản hiện hành là [`E3a_NHK_README.md`](E3a_NHK_README.md): nhóm đã chốt ngưỡng P99, seed 16/17/18, và DeepSVDD bảng chính đã chạy lại với `upstream_eval_bn`. Các đề xuất ở cuối file này (seed 0–2, ngưỡng P95) không còn áp dụng.
+
 Nguồn: gói `Data_mining_NHK.zip` (Ngô Hoàng Khang, 23/11/2026). Code chạy trên Colab và checkpoint nằm trên Drive của Khang, xem `artifact_locations.md` trong gói. Repo chỉ giữ CSV.
 
 ## File đã đưa vào repo

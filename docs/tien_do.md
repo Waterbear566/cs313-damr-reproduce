@@ -1,6 +1,6 @@
 # Tiến độ và công việc – phần code (Nhóm 5)
 
-Cập nhật: 25/11/2026. File này dành cho những người làm code trong repo. Ai xong việc hoặc đổi trạng thái thì sửa file này trong PR của mình.
+Cập nhật: 28/11/2026. File này dành cho những người làm code trong repo. Ai xong việc hoặc đổi trạng thái thì sửa file này trong PR của mình.
 
 Ký hiệu: ✅ xong · 🟡 đang làm · ⬜ chưa bắt đầu · ⏸ đang chờ việc khác
 
@@ -8,9 +8,9 @@ Ký hiệu: ✅ xong · 🟡 đang làm · ⬜ chưa bắt đầu · ⏸ đang c
 
 ## Tóm tắt
 
-- **Đã xong:** dựng repo, README, quy ước kết quả, code ghi log cho E2, script chạy E2, notebook Kaggle, script kiểm tra dữ liệu, danh sách 11 điểm khác biệt giữa code và bài báo.
-- **Chưa có:** số liệu nào trong `results/`. Chưa chạy thật thí nghiệm nào. Chưa có code baseline.
-- **Việc gấp nhất:** merge nhánh `e2-damr-logging`, tải dữ liệu PSM/MSL/SMD, chạy thử notebook Kaggle để biết mỗi lần train mất bao lâu.
+- **Đã xong:** dựng repo, README, quy ước kết quả, code ghi log cho E2, script chạy E2, notebook Kaggle, script kiểm tra dữ liệu, danh sách 11 điểm khác biệt giữa code và bài báo, E1 (thống kê dataset), E3a (45 lượt baseline nhóm A, đã tính F1/flagged rate P99).
+- **Chưa có:** E3b, E4, E5, E6.
+- **Việc gấp nhất:** merge PR của Hoàng Khang (E1, E3a), chạy E4 trên Kaggle.
 
 ---
 
@@ -18,9 +18,9 @@ Ký hiệu: ✅ xong · 🟡 đang làm · ⬜ chưa bắt đầu · ⏸ đang c
 
 | Mã | Thí nghiệm | Người làm | Số lần train | Trạng thái | Ghi chú |
 |---|---|---|---|---|---|
-| E1 | Thống kê dataset (Bảng 1) | Hoàng Khang | 0 | 🟡 | Đã có `scripts/check_data.py`, cần dữ liệu để chạy |
+| E1 | Thống kê dataset (Bảng 1) | Hoàng Khang | 0 | ✅ | `results/E1_dataset_stats.csv`, `results/E1_missing_values_by_feature.csv` |
 | E2 | DAMR gốc, 3 dataset × 10 seed (16–25) | Mạnh Hùng, Huy Khang | 30 | ✅ | `results/E2_DAMR.csv` (16–25), bảng chính `E2_summary.csv` (16–18), `E2_summary_10seeds.csv`; seed 0, 1, 2 là thí nghiệm phụ. Checkpoint: Drive chung `checkpoints/E2/` (`e2_outputs_seeds16-25.zip`) |
-| E3a | DeepSVDD, ALOCC, USAD, GANF, MTGFlow | Hoàng Khang | 45 | ⬜ | |
+| E3a | DeepSVDD, ALOCC, USAD, GANF, MTGFlow | Hoàng Khang | 45 | ✅ | Epoch cuối; F1/flagged rate P99. DeepSVDD chính: `upstream_eval_bn`. Xem `docs/E3a_NHK_README.md` |
 | E3b | Anomaly Transformer, DCdetector, TFMAE, MtsCID | Minh Hoàng | 36 | ⬜ | |
 | E4 | Ablation (5 biến thể) | Mạnh Hùng, Huy Khang | 45 | ⬜ | Thiếu cờ cho MSASB(G), MSASB(L), τ cố định |
 | E5 | Nhiễu Gaussian trên PSM | Huy Khang | 0 | ⏸ | Checkpoint E2 ở Drive `checkpoints/E2/`; chờ E3, E4 |
@@ -44,11 +44,12 @@ Tổng cộng khoảng 135 lần train. Cần ước lượng thời gian sau kh
 - [ ] Review PR của Hoàng Khang và Huy Khang
 
 ### Ngô Hoàng Khang – E1, E3a, hàm metric chung, demo
-- [ ] Chạy `python scripts/check_data.py --root DAMR/data` và xuất Bảng 1 vào `results/`
+- [x] Thống kê dataset E1 (Bảng 1): đã có trong `results/E1_dataset_stats.csv` và `results/E1_missing_values_by_feature.csv`
 - [x] Hàm metric chung (`common/metrics.py`) và dữ liệu chung cho baseline (`common/data.py`): đã có, cần review
-- [ ] Đưa 5 baseline nhóm A vào `baselines/<tên>/` theo `baselines/README.md` và mẫu `baselines/_template/`
+- [x] Chạy 5 baseline nhóm A (DeepSVDD, ALOCC, USAD, GANF, MTGFlow) × 3 dataset × 3 seed (16/17/18): đã có trong `results/E3_*.csv`
+- [x] Đưa code Colab của 5 baseline vào `baselines/<tên>/colab_E3a/` và notebook vào `notebooks/`
 - [ ] Chuẩn bị demo
-- [ ] Review PR của Mạnh Hùng và Minh Hoàng
+- [ ] Review PR của Mạnh Hùng và người làm E3b
 
 ### Lê Minh Hoàng – E3b
 - [ ] Đưa 4 baseline nhóm B vào `baselines/<tên>/` theo `baselines/README.md` và mẫu `baselines/_template/`
